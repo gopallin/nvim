@@ -14,20 +14,46 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-{ "kyazdani42/nvim-tree.lua", event = "VimEnter", dependencies = "nvim-tree/nvim-web-devicons" },
+  {'akinsho/bufferline.nvim', dependencies = 'nvim-tree/nvim-web-devicons'},
 
-{
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' }
-},
-{
-    'nvim-telescope/telescope.nvim', tag = '0.1.8',
--- or                              , branch = '0.1.x',
-      dependencies = { 'nvim-lua/plenary.nvim' }
-    },
-{
+  -- diffview.nvim
+  {
+    "sindrets/diffview.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  -- nvim-tree.lua
+  {
+    "kyazdani42/nvim-tree.lua",
+    event = "VimEnter",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
+  -- lualine.nvim
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
+  -- telescope.nvim
+  {
+    "nvim-telescope/telescope.nvim",
+    tag = "0.1.8",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  -- mason.nvim and LSP
+  {
     "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
-},
+  },
+  { "williamboman/mason-lspconfig.nvim", dependencies = "neovim/nvim-lspconfig" },
+
+  -- nvim-cmp and snippets
+  { "hrsh7th/nvim-cmp" },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "L3MON4D3/LuaSnip" },
+  { "rafamadriz/friendly-snippets" },
+  { "hrsh7th/cmp-buffer" },
+  { "hrsh7th/cmp-cmdline" },
+  { "saadparwaiz1/cmp_luasnip" },
 })

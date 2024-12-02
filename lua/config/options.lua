@@ -1,3 +1,5 @@
+vim.cmd("colorscheme habamax")
+
 vim.g.encoding = "UTF-8"
 vim.o.fileencoding = "UTF-8"
 
@@ -7,5 +9,7 @@ vim.o.softtabstop = 4
 vim.o.shiftround = true
 
 vim.opt.clipboard = "unnamedplus"
-
 vim.opt.number = true
+
+vim.o.showtabline = 2 -- Always show the tabline
+
