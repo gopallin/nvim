@@ -17,7 +17,6 @@ if not mlsp_status then
  return
 end
 
-
 mason.setup()
 mason_lspconfig.setup({})
 

@@ -14,12 +14,14 @@ map("n", "<C-f>", ":Telescope live_grep<CR>", opt)
 map("n", "<leader>do", ":DiffviewOpen<CR>", opt)
 map("n", "<leader>dc", ":DiffviewClose<CR>", opt)
 
-
 map("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true })
 map("n", "<leader>bp", ":bprev<CR>", { noremap = true, silent = true })
-map("n", "<leader>bd", ":bd<CR>", { noremap = true, silent = true }) -- Close buffer
+map("n", "<leader>bd", ":bd<CR>", { noremap = true, silent = true })
 
 map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
+map("n", "<leader>g", ":NvimTreeFindFile<CR>", opt)
+
+map("n", "t", ":term<CR>", opt)
 
 local function setup_nvim_tree_keymaps(bufnr)
   local api = require("nvim-tree.api")
