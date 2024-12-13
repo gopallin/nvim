@@ -1,8 +1,8 @@
 -- 初始化插件設定
 local function load_files(path, files)
-    for _, file in ipairs(files) do
-        require(path .. "." .. file)
-    end
+	for _, file in ipairs(files) do
+			require(path .. "." .. file)
+	end
 end
 
 -- 插件設定
@@ -10,11 +10,12 @@ load_files("plugins", {
     "lazy",           -- Lazy.nvim 的配置
     "lualine",        -- lualine 狀態列
     "nvim-tree",      -- 文件樹
-    "telescope",      -- 搜尋功能
     "mason",          -- LSP 管理
     "nvim-cmp",
-    "telescope",
-	"bufferline",
+    "bufferline",
+    "diffview",
+    "formatter",
+    "fzf-lua",
 })
 
 -- 全域設定

@@ -1,15 +1,29 @@
 vim.cmd("colorscheme habamax")
+--vim.cmd("colorscheme default")
 
 vim.g.encoding = "UTF-8"
 vim.o.fileencoding = "UTF-8"
 
-vim.o.tabstop = 4
-vim.bo.tabstop = 4
-vim.o.softtabstop = 4
+vim.o.tabstop = 2
+vim.bo.tabstop = 2
+vim.o.softtabstop = 2
 vim.o.shiftround = true
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.tabstop = 2
 
 vim.opt.clipboard = "unnamedplus"
 vim.opt.number = true
 
 vim.o.showtabline = 2 -- Always show the tabline
+
+vim.o.ignorecase = true
+vim.o.smartcase = true
+
+vim.o.cursorline = true
+vim.o.cursorcolumn = true
+
+vim.opt.foldmethod = "indent"
+vim.opt.foldenable = true -- Enable folding
+vim.opt.foldlevel = 99    -- Start with all folds open
 

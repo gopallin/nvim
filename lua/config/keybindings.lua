@@ -8,20 +8,41 @@ local opt = { noremap = true, silent = true }
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-map("n", "<C-p>", ":Telescope find_files<CR>", opt)
-map("n", "<C-f>", ":Telescope live_grep<CR>", opt)
-
 map("n", "<leader>do", ":DiffviewOpen<CR>", opt)
 map("n", "<leader>dc", ":DiffviewClose<CR>", opt)
 
-map("n", "<leader>bn", ":bnext<CR>", { noremap = true, silent = true })
-map("n", "<leader>bp", ":bprev<CR>", { noremap = true, silent = true })
-map("n", "<leader>bd", ":bd<CR>", { noremap = true, silent = true })
+map("n", "<leader>be", ":bnext<CR>", { noremap = true, silent = true })
+map("n", "<leader>bb", ":bprev<CR>", { noremap = true, silent = true })
+map("n", "<leader>bd", ":bnext<CR>:bd#<CR>", { noremap = true, silent = true })
 
 map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
 map("n", "<leader>g", ":NvimTreeFindFile<CR>", opt)
 
 map("n", "t", ":term<CR>", opt)
+map('n', 'm', ':Format<CR>', { noremap = true, silent = true })
+map('v', 'q', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+map('v', 'z', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+map('v', '<Tab>', '>gv', { noremap = true, silent = true })
+map('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
+
+-- Scroll viewport without moving cursor
+map('n', '<C-e>', '7<C-e>', { noremap = true })  -- Scroll down
+map('n', '<C-y>', '7<C-y>', { noremap = true })  -- Scroll up
+
+-- Files and Search
+map("n", "<leader>ff", "<cmd>lua require('fzf-lua').files()<CR>", opt)       -- Find files
+map("n", "<leader>fg", "<cmd>lua require('fzf-lua').live_grep()<CR>", opt)   -- Live grep
+map("n", "<leader>fb", "<cmd>lua require('fzf-lua').buffers()<CR>", opt)     -- Open buffers
+map("n", "<leader>fh", "<cmd>lua require('fzf-lua').help_tags()<CR>", opt)   -- Help tags
+
+-- Git integration
+map("n", "<leader>gc", "<cmd>lua require('fzf-lua').git_commits()<CR>", opt) -- Git commits
+map("n", "<leader>gs", "<cmd>lua require('fzf-lua').git_status()<CR>", opt)  -- Git status
+
+-- LSP-related keybindings
+map("n", "<leader>ld", "<cmd>lua require('fzf-lua').lsp_definitions()<CR>", opt) -- LSP definitions
+map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references()<CR>", opt)  -- LSP references
+map("n", "<leader>li", "<cmd>lua require('fzf-lua').lsp_implementations()<CR>", opt) -- LSP implementations
 
 local function setup_nvim_tree_keymaps(bufnr)
   local api = require("nvim-tree.api")

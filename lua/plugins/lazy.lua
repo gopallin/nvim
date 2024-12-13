@@ -14,39 +14,33 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  {'akinsho/bufferline.nvim', dependencies = 'nvim-tree/nvim-web-devicons'},
+  -- Global dependencies
+  { "nvim-tree/nvim-web-devicons" }, -- Used by multiple plugins
+  { "nvim-lua/plenary.nvim" },       -- Core library for plugins
+
+  -- Plugins
+  { "akinsho/bufferline.nvim" },
 
   -- diffview.nvim
-  {
-    "sindrets/diffview.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
+  { "sindrets/diffview.nvim" },
 
   -- nvim-tree.lua
   {
     "kyazdani42/nvim-tree.lua",
     event = "VimEnter",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 
   -- lualine.nvim
-  {
-    "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
-
-  -- telescope.nvim
-  {
-    "nvim-telescope/telescope.nvim",
-    tag = "0.1.8",
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
+  { "nvim-lualine/lualine.nvim" },
 
   -- mason.nvim and LSP
+  { "williamboman/mason.nvim" },
   {
-    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "neovim/nvim-lspconfig" },
   },
-  { "williamboman/mason-lspconfig.nvim", dependencies = "neovim/nvim-lspconfig" },
+
+  { "mhartington/formatter.nvim" },
 
   -- nvim-cmp and snippets
   { "hrsh7th/nvim-cmp" },
@@ -56,9 +50,7 @@ require("lazy").setup({
   { "hrsh7th/cmp-buffer" },
   { "hrsh7th/cmp-cmdline" },
   { "saadparwaiz1/cmp_luasnip" },
-  {
-    "folke/trouble.nvim",
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
-    cmd = "Trouble",
-  },
+
+  { "ibhagwan/fzf-lua" }
 })
+

@@ -4,7 +4,7 @@ if not status then
 	return
 end
 
-require("bufferline").setup({
+bufferline.setup({
   options = {
     mode = "buffers", -- Show buffers instead of tabs
     numbers = "ordinal",
@@ -22,14 +22,30 @@ require("bufferline").setup({
     separator_style = "slant", -- Separator style
   },
   highlights = {
+    -- Highlight for the selected buffer
     buffer_selected = {
-      fg = "#FFFFFF", -- Foreground color for selected buffer
-      bg = "#44475A", -- Background color for selected buffer
-      bold = true,    -- Make it bold
-      italic = false, -- Optional: make it italic
+      fg = "#FFFFFF", -- Text color for the selected buffer
+      bg = "#99a3e0", -- Background color for the selected buffer
+      bold = true,    -- Make the text bold
+      italic = false, -- Disable italic
     },
+    -- Highlight for unselected buffers
+    buffer_visible = {
+      fg = "#AAAAAA", -- Text color for visible but not selected buffers
+      bg = "#3b3f51", -- Background color for unselected buffers
+    },
+    -- Highlight for the fill area in the bufferline
     fill = {
-      bg = "#282A36", -- Background color for the bufferline
+      bg = "#282A36", -- Background color for the bufferline fill
+    },
+    -- Highlight for the tab separator
+    separator_selected = {
+      fg = "#99a3e0", -- Same as `buffer_selected.bg` for seamless look
+      bg = "#282A36", -- Match `fill.bg`
+    },
+    separator_visible = {
+      fg = "#3b3f51", -- Same as `buffer_visible.bg`
+      bg = "#282A36", -- Match `fill.bg`
     },
   },
 })

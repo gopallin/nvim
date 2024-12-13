@@ -14,13 +14,13 @@ end
 
 -- Setup nvim-cmp
 cmp.setup({
-     mapping = {
-                    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                    ['<C-Space>'] = cmp.mapping.complete(),
-                    ['<C-e>'] = cmp.mapping.abort(),
-                    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                },
+  mapping = {
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
   -- Autocompletion sources
   sources = {
     { name = 'nvim_lsp' },    -- LSP source for completion
@@ -42,6 +42,6 @@ lspconfig.intelephense.setup({
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
 
-lspconfig.tsserver.setup({
+lspconfig.ts_ls.setup({
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })

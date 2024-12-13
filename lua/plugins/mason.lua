@@ -5,7 +5,7 @@ if not mason_status then
  return
 end
 
-local nlsp_status, nvim_lsp = pcall(require, "lspconfig")
+local nlsp_status, lspconfig = pcall(require, "lspconfig")
 if not nlsp_status then
  vim.notify("lspconfig not found")
  return
@@ -17,6 +17,14 @@ if not mlsp_status then
  return
 end
 
+-- Setup mason
 mason.setup()
-mason_lspconfig.setup({})
 
+-- Setup mason-lspconfig
+mason_lspconfig.setup({
+  ensure_installed = { "lua_ls", "ts_ls", "pyright", "rust_analyzer" },
+  automatic_installation = true,
+})
+
+-- Test lspconfig directly
+lspconfig.lua_ls.setup({})
