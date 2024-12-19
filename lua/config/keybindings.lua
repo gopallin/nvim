@@ -30,6 +30,7 @@ map('n', '<C-e>', '7<C-e>')  -- Scroll down
 map('n', '<C-y>', '7<C-y>')  -- Scroll up
 
 -- Files and Search
+map("n", "<leader>fe", ":lua require('config.fzf-diagnostics').show_diagnostics_in_fzf()<CR>")
 map("n", "<leader>ff", "<cmd>lua require('fzf-lua').files()<CR>")       -- Find files
 map("n", "<leader>fg", "<cmd>lua require('fzf-lua').live_grep()<CR>")   -- Live grep
 map("n", "<leader>fb", "<cmd>lua require('fzf-lua').buffers()<CR>")     -- Open buffers
@@ -40,15 +41,15 @@ map("n", "<leader>gc", "<cmd>lua require('fzf-lua').git_commits()<CR>") -- Git c
 map("n", "<leader>gs", "<cmd>lua require('fzf-lua').git_status()<CR>")  -- Git status
 
 -- LSP-related keybindings
-map("n", "<leader>ld", "<cmd>lua require('fzf-lua').lsp_definitions()<CR>") -- LSP definitions
-map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references()<CR>")  -- LSP references
+map("n", "<leader>ld", vim.lsp.buf.definition) -- Go to LSP definition directly
+map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references({ action = 'edit' })<CR>")  -- LSP references with fzf-lua
 map("n", "<leader>li", "<cmd>lua require('fzf-lua').lsp_implementations()<CR>") -- LSP implementations
 
 for i = 1, 8 do
-  map("n", tostring(i), ":BufferLineGoToBuffer " .. i .. "<CR>")
+  map("n", "<leader>" .. tostring(i), ":BufferLineGoToBuffer " .. i .. "<CR>")
 end
 
-map("n", "9", "<cmd>lua require('config.keybindings').jump_to_last_buffer()<CR>")
+map("n", "<leader>9", "<cmd>lua require('config.keybindings').jump_to_last_buffer()<CR>")
 
 local function setup_nvim_tree_keymaps(bufnr)
   local api = require("nvim-tree.api")
