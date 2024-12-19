@@ -1,48 +1,54 @@
 local function map(mode, lhs, rhs, opts)
     opts = opts or { noremap = true, silent = true }
-    vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+    vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-local opt = { noremap = true, silent = true }
+map({'n', 'v'}, 'gg', 'gg^')
+map({'n', 'v'}, 'G', 'Gg$')
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+map("n", "<leader>do", ":DiffviewOpen<CR>")
+map("n", "<leader>dc", ":DiffviewClose<CR>")
 
-map("n", "<leader>do", ":DiffviewOpen<CR>", opt)
-map("n", "<leader>dc", ":DiffviewClose<CR>", opt)
+map("n", "<leader>be", ":bnext<CR>")
+map("n", "<leader>bb", "<C-^>")
+map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
+map("n", "<leader>bo", ":b#<CR>")
 
-map("n", "<leader>be", ":bnext<CR>", { noremap = true, silent = true })
-map("n", "<leader>bb", ":bprev<CR>", { noremap = true, silent = true })
-map("n", "<leader>bd", ":bnext<CR>:bd#<CR>", { noremap = true, silent = true })
+map("n", "<leader>e", ":NvimTreeToggle<CR>")
+map("n", "<leader>g", ":NvimTreeFindFile<CR>")
 
-map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
-map("n", "<leader>g", ":NvimTreeFindFile<CR>", opt)
-
-map("n", "t", ":term<CR>", opt)
-map('n', 'm', ':Format<CR>', { noremap = true, silent = true })
-map('v', 'q', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-map('v', 'z', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
-map('v', '<Tab>', '>gv', { noremap = true, silent = true })
-map('v', '<S-Tab>', '<gv', { noremap = true, silent = true })
+map("t", "<Esc>", "<C-\\><C-n>")
+map("n", "t", ":term<CR>")
+map('n', 'm', ':Format<CR>')
+map('v', 'q', ":m '<-2<CR>gv=gv")
+map('v', 'z', ":m '>+1<CR>gv=gv")
+map('v', '<Tab>', '>gv')
+map('v', '<S-Tab>', '<gv')
 
 -- Scroll viewport without moving cursor
-map('n', '<C-e>', '7<C-e>', { noremap = true })  -- Scroll down
-map('n', '<C-y>', '7<C-y>', { noremap = true })  -- Scroll up
+map('n', '<C-e>', '7<C-e>')  -- Scroll down
+map('n', '<C-y>', '7<C-y>')  -- Scroll up
 
 -- Files and Search
-map("n", "<leader>ff", "<cmd>lua require('fzf-lua').files()<CR>", opt)       -- Find files
-map("n", "<leader>fg", "<cmd>lua require('fzf-lua').live_grep()<CR>", opt)   -- Live grep
-map("n", "<leader>fb", "<cmd>lua require('fzf-lua').buffers()<CR>", opt)     -- Open buffers
-map("n", "<leader>fh", "<cmd>lua require('fzf-lua').help_tags()<CR>", opt)   -- Help tags
+map("n", "<leader>ff", "<cmd>lua require('fzf-lua').files()<CR>")       -- Find files
+map("n", "<leader>fg", "<cmd>lua require('fzf-lua').live_grep()<CR>")   -- Live grep
+map("n", "<leader>fb", "<cmd>lua require('fzf-lua').buffers()<CR>")     -- Open buffers
+map("n", "<leader>fh", "<cmd>lua require('fzf-lua').help_tags()<CR>")   -- Help tags
 
 -- Git integration
-map("n", "<leader>gc", "<cmd>lua require('fzf-lua').git_commits()<CR>", opt) -- Git commits
-map("n", "<leader>gs", "<cmd>lua require('fzf-lua').git_status()<CR>", opt)  -- Git status
+map("n", "<leader>gc", "<cmd>lua require('fzf-lua').git_commits()<CR>") -- Git commits
+map("n", "<leader>gs", "<cmd>lua require('fzf-lua').git_status()<CR>")  -- Git status
 
 -- LSP-related keybindings
-map("n", "<leader>ld", "<cmd>lua require('fzf-lua').lsp_definitions()<CR>", opt) -- LSP definitions
-map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references()<CR>", opt)  -- LSP references
-map("n", "<leader>li", "<cmd>lua require('fzf-lua').lsp_implementations()<CR>", opt) -- LSP implementations
+map("n", "<leader>ld", "<cmd>lua require('fzf-lua').lsp_definitions()<CR>") -- LSP definitions
+map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references()<CR>")  -- LSP references
+map("n", "<leader>li", "<cmd>lua require('fzf-lua').lsp_implementations()<CR>") -- LSP implementations
+
+for i = 1, 8 do
+  map("n", tostring(i), ":BufferLineGoToBuffer " .. i .. "<CR>")
+end
+
+map("n", "9", "<cmd>lua require('config.keybindings').jump_to_last_buffer()<CR>")
 
 local function setup_nvim_tree_keymaps(bufnr)
   local api = require("nvim-tree.api")
@@ -50,14 +56,20 @@ local function setup_nvim_tree_keymaps(bufnr)
   local function opts(desc)
     return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
   end
-  vim.keymap.set("n", "a", api.fs.create, opts("Create"))
-  vim.keymap.set("n", "d", api.fs.remove, opts("Delete"))
-  vim.keymap.set("n", "r", api.fs.rename, opts("Rename/Update"))
-  vim.keymap.set("n", "<CR>", api.node.open.edit, opts("Open"))
-  vim.keymap.set("n", "yy", api.fs.copy.node, opts("Copy"))
-  vim.keymap.set("n", "p", api.fs.paste, opts("Paste"))
+  map("n", "a", api.fs.create, opts("Create"))
+  map("n", "d", api.fs.remove, opts("Delete"))
+  map("n", "r", api.fs.rename, opts("Rename/Update"))
+  map("n", "<CR>", api.node.open.edit, opts("Open"))
+  map("n", "yy", api.fs.copy.node, opts("Copy"))
+  map("n", "p", api.fs.paste, opts("Paste"))
+end
+
+local function jump_to_last_buffer()
+  local last_buffer_index = #vim.fn.getbufinfo({ buflisted = true })
+  vim.cmd("BufferLineGoToBuffer " .. last_buffer_index)
 end
 
 return {
   setup_nvim_tree_keymaps = setup_nvim_tree_keymaps,
+  jump_to_last_buffer = jump_to_last_buffer,
 }

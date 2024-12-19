@@ -1,8 +1,13 @@
 vim.cmd("colorscheme habamax")
 --vim.cmd("colorscheme default")
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 vim.g.encoding = "UTF-8"
 vim.o.fileencoding = "UTF-8"
+
+vim.opt.shell = "/bin/zsh"
 
 vim.o.tabstop = 2
 vim.bo.tabstop = 2

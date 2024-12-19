@@ -5,6 +5,10 @@ local function load_files(path, files)
 	end
 end
 
+load_files("config", {
+    "options",
+})
+
 -- 插件設定
 load_files("plugins", {
     "lazy",           -- Lazy.nvim 的配置
@@ -20,6 +24,5 @@ load_files("plugins", {
 
 -- 全域設定
 load_files("config", {
-    "options",        -- 編輯器選項
-    "keybindings",    -- 快捷鍵綁定
+		"keybindings",    -- 快捷鍵綁定
 })
