@@ -42,8 +42,27 @@ map("n", "<leader>gs", "<cmd>lua require('fzf-lua').git_status()<CR>")  -- Git s
 
 -- LSP-related keybindings
 map("n", "<leader>ld", vim.lsp.buf.definition) -- Go to LSP definition directly
-map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references({ action = 'edit' })<CR>")  -- LSP references with fzf-lua
+--map("n", "<leader>lr", "<cmd>lua require('fzf-lua').lsp_references({ action = 'edit' })<CR>")  -- LSP references with fzf-lua
 map("n", "<leader>li", "<cmd>lua require('fzf-lua').lsp_implementations()<CR>") -- LSP implementations
+
+-- Function to toggle LSP references
+local lsp_references_open = false
+
+local function toggle_lsp_references()
+  if lsp_references_open then
+    -- Close the window if it's already open
+    vim.cmd("cclose")
+    lsp_references_open = false
+  else
+    -- Show LSP references and set the flag to open
+    vim.lsp.buf.references()
+    lsp_references_open = true
+  end
+end
+
+-- Map <leader>lr to toggle the LSP references
+map("n", "<leader>lr", toggle_lsp_references)
+
 
 for i = 1, 8 do
   map("n", "<leader>" .. tostring(i), ":BufferLineGoToBuffer " .. i .. "<CR>")
