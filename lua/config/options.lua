@@ -11,11 +11,10 @@ vim.opt.shell = "/bin/zsh"
 
 vim.o.tabstop = 2
 vim.bo.tabstop = 2
-vim.o.softtabstop = 2
 vim.o.shiftround = true
 vim.o.shiftwidth = 2
 vim.o.softtabstop = 2
-vim.o.tabstop = 2
+vim.o.expandtab = true
 
 vim.opt.clipboard = "unnamedplus"
 vim.opt.number = true
