@@ -15,7 +15,6 @@ map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
 map("n", "<leader>bo", ":b#<CR>")
 
 map("n", "<leader>e", ":NvimTreeToggle<CR>")
-map("n", "<leader>g", ":NvimTreeFindFile<CR>")
 
 map("t", "<Esc>", "<C-\\><C-n>")
 map("n", "t", ":term<CR>")

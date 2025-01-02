@@ -18,20 +18,25 @@ nvim_tree.setup({
   },
   view = {
     side = "left",
-	number = false,
-	relativenumber = false,
-	signcolumn = "no",
-	width = 30,
+    number = false,
+    relativenumber = false,
+    signcolumn = "no",
+    width = 30,
   },
   renderer = {
     group_empty = true,
 	icons = {
 		show = {
-				folder_arrow = true,
-				file = true,
-				folder = true,
+      folder_arrow = true,
+      file = true,
+      folder = true,
 		},
 	},
+  },
+  update_focused_file = {
+    enable = true,        -- Enable this feature
+    update_cwd = true,    -- Update the tree to match the current working directory
+    ignore_list = {},     -- List of filetypes to ignore
   },
 })
 
