@@ -10,7 +10,6 @@ map("n", "<leader>do", ":DiffviewOpen<CR>")
 map("n", "<leader>dc", ":DiffviewClose<CR>")
 
 map("n", "<leader>be", ":bnext<CR>")
-map("n", "<leader>bb", "<C-^>")
 map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
 map("n", "<leader>bo", ":b#<CR>")
 
@@ -88,7 +87,19 @@ local function jump_to_last_buffer()
   vim.cmd("BufferLineGoToBuffer " .. last_buffer_index)
 end
 
+local function switch_to_previous_buffer()
+  local buffers = vim.fn.getbufinfo({ buflisted = true }) -- Get all listed buffers
+  if #buffers > 1 then
+    vim.cmd("b#") -- Switch to the previous buffer
+  else
+    vim.notify("No previous buffer available", vim.log.levels.INFO)
+  end
+end
+
+vim.keymap.set("n", "<leader>bb", switch_to_previous_buffer, { noremap = true, silent = true })
+
 return {
   setup_nvim_tree_keymaps = setup_nvim_tree_keymaps,
   jump_to_last_buffer = jump_to_last_buffer,
+  switch_to_previous_buffer,
 }
