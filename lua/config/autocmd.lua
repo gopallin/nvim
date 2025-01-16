@@ -1,13 +1,13 @@
 vim.api.nvim_create_autocmd("CursorHold", {
-    callback = function()
-        vim.lsp.buf.document_highlight()
-    end,
+  callback = function()
+    vim.lsp.buf.document_highlight()
+  end,
 })
 
 vim.api.nvim_create_autocmd("CursorMoved", {
-    callback = function()
-        vim.lsp.buf.clear_references()
-    end,
+  callback = function()
+    vim.lsp.buf.clear_references()
+  end,
 })
 
 vim.api.nvim_create_autocmd("User", {
@@ -22,11 +22,11 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = "*",
-    callback = function()
-        vim.cmd("highlight CursorLine ctermbg=darkgrey guibg=darkgrey")
-        vim.cmd("highlight CursorColumn ctermbg=darkgrey guibg=darkgrey")
-    end,
+  pattern = "*",
+  callback = function()
+    vim.cmd("highlight CursorLine ctermbg=darkgrey guibg=darkgrey")
+    vim.cmd("highlight CursorColumn ctermbg=darkgrey guibg=darkgrey")
+  end,
 })
 
 local fzf_lua = require("fzf-lua")
@@ -53,3 +53,4 @@ vim.api.nvim_create_autocmd("BufEnter", {
     show_git_blame()
   end,
 })
+

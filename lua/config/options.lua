@@ -1,5 +1,7 @@
 vim.cmd("colorscheme habamax")
---vim.cmd("colorscheme default")
+--vim.cmd("colorscheme evening")
+--vim.api.nvim_set_hl(0, 'String', { fg = "#222222" })
+vim.api.nvim_set_hl(0, 'Cursor', { reverse = true, fg = "#ffff00" })
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
