@@ -34,6 +34,15 @@ function M.show_diagnostics_in_fzf()
           vim.api.nvim_win_set_cursor(0, { line, 0 })
         end
       end,
+      ["ctrl-y"] = function(selected)
+        local msg = selected[1]:match(":%s(.+)$")
+        if msg then
+          vim.fn.setreg("+", msg)  -- Copy to the system clipboard
+          vim.notify("Error message copied to clipboard", vim.log.levels.INFO)
+        else
+          vim.notify("Failed to copy the error message", vim.log.levels.ERROR)
+        end
+      end,
     },
   })
 end
