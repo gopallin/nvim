@@ -15,8 +15,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   -- Global dependencies
-  { "nvim-tree/nvim-web-devicons" }, -- Used by multiple plugins
-  { "nvim-lua/plenary.nvim" },       -- Core library for plugins
+  { "nvim-tree/nvim-web-devicons" },
+  { "nvim-lua/plenary.nvim" },
 
   -- Plugins
   { "akinsho/bufferline.nvim" },
@@ -51,6 +51,13 @@ require("lazy").setup({
   { "hrsh7th/cmp-cmdline" },
   { "saadparwaiz1/cmp_luasnip" },
 
-  { "ibhagwan/fzf-lua" }
+  { "ibhagwan/fzf-lua" },
+
+  { "yetone/avante.nvim",
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+  },
 })
 

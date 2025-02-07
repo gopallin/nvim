@@ -19,6 +19,8 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
+    ["<C-d>"] = cmp.mapping.select_next_item(),
+    ["<C-u>"] = cmp.mapping.select_prev_item(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
   },
   -- Autocompletion sources

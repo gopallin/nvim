@@ -6,6 +6,12 @@ end
 map({'n', 'v'}, 'gg', 'gg^')
 map({'n', 'v'}, 'G', 'Gg$')
 
+map('n', '<leader>ad', "<cmd>lua require('avante').diff()<CR>")
+
+vim.keymap.set('n', '<leader>av', function() require('avante').view() end, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>ae', function() require('avante').some_correct_function() end, { noremap = true, silent = true })
+
+
 map("n", "<leader>do", ":DiffviewOpen<CR>")
 map("n", "<leader>dc", ":DiffviewClose<CR>")
 

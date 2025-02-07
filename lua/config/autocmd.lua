@@ -29,25 +29,24 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-local fzf_lua = require("fzf-lua")
-
 local function show_git_blame()
-  local file = vim.fn.expand("%:p")
-  if file == "" or vim.bo.filetype == "nofile" then
+  local line_number = vim.fn.line('.')
+  local blame_output = vim.fn.systemlist('git blame -L ' .. line_number .. ',' .. line_number .. ' --porcelain')
+
+  if not blame_output or #blame_output == 0 then
     return
   end
-  local cmd = string.format("git blame %s", file)
-  fzf_lua.fzf_exec(cmd, {
-    preview = "git show {1}",
-    actions = {
-      ["default"] = function(selected)
-        print("Commit:", selected[1])
-      end,
-    },
-  })
+
+  local commit_hash = string.match(blame_output[1], "^%w+")
+  local commit_message = vim.fn.system('git show -s --format=%s ' .. commit_hash)
+
+  if commit_message and #commit_message > 0 then
+    -- Display commit message in the command line
+    vim.api.nvim_echo({{ commit_message, 'Normal' }}, false, {})
+  end
 end
 
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("CursorHold", {
   pattern = "*",
   callback = function()
     show_git_blame()
