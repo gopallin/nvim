@@ -19,7 +19,7 @@ bufferline.setup({
     offsets = {
       { filetype = "NvimTree", text = "File Explorer", text_align = "center" },
     },
-    always_show_bufferline = false, -- Always show the bufferline
+    always_show_bufferline = true, -- Always show the bufferline
     show_buffer_close_icons = false,
     show_close_icon = false,
     separator_style = "slant", -- Separator style
