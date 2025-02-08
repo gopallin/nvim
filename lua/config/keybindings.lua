@@ -11,7 +11,6 @@ map('n', '<leader>ad', "<cmd>lua require('avante').diff()<CR>")
 vim.keymap.set('n', '<leader>av', function() require('avante').view() end, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>ae', function() require('avante').some_correct_function() end, { noremap = true, silent = true })
 
-
 map("n", "<leader>do", ":DiffviewOpen<CR>")
 map("n", "<leader>dc", ":DiffviewClose<CR>")
 
@@ -145,42 +144,79 @@ vim.keymap.set("n", "<leader>z", toggle_left_diff_pane, { noremap = true, silent
 
 local terminal_buf = nil
 local terminal_win = nil
-local last_buf = nil -- Store the original buffer before opening the terminal
+local last_buf = nil   -- The file buffer you were in
+local last_win = nil   -- The window where that file was displayed
 
 local function open_terminal()
-  last_buf = vim.api.nvim_get_current_buf() -- Save the current buffer
-  vim.cmd("botright split") -- Open a horizontal split at the bottom
-  vim.cmd("resize 15") -- Resize the terminal window
-  vim.cmd("term") -- Open a new terminal
-  terminal_buf = vim.api.nvim_get_current_buf() -- Store the terminal buffer ID
-  terminal_win = vim.api.nvim_get_current_win() -- Store the window ID
+  -- Save the current buffer and window (the file you were editing)
+  last_buf = vim.api.nvim_get_current_buf()
+  last_win = vim.api.nvim_get_current_win()
+  -- Open a terminal in a horizontal split at the bottom
+  vim.cmd("botright split")
+  vim.cmd("resize 15")
+  vim.cmd("term")
+  terminal_buf = vim.api.nvim_get_current_buf()
+  terminal_win = vim.api.nvim_get_current_win()
 end
 
 local function toggle_terminal()
   if terminal_win and vim.api.nvim_win_is_valid(terminal_win) then
-    -- If the terminal is visible, hide it and return to the last buffer
+    -- If the terminal window is visible, close it...
     vim.api.nvim_win_close(terminal_win, true)
     terminal_win = nil
-    if last_buf and vim.api.nvim_buf_is_valid(last_buf) then
-      vim.api.nvim_set_current_buf(last_buf) -- Switch back to the last buffer
-    end
+    -- ...and defer switching back to the last window/buffer.
+    vim.defer_fn(function()
+      if last_win and vim.api.nvim_win_is_valid(last_win) then
+        vim.api.nvim_set_current_win(last_win)
+        vim.api.nvim_set_current_buf(last_buf)
+      elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
+        vim.api.nvim_set_current_buf(last_buf)
+      end
+    end, 50)  -- Adjust the delay (in ms) if needed
   else
-    -- If terminal is closed, reopen it
-    last_buf = vim.api.nvim_get_current_buf() -- Save the current buffer
+    -- Otherwise, save the current file buffer and window before reopening the terminal
+    last_buf = vim.api.nvim_get_current_buf()
+    last_win = vim.api.nvim_get_current_win()
     if terminal_buf and vim.api.nvim_buf_is_valid(terminal_buf) then
-      vim.cmd("botright split") -- Open a horizontal split at the bottom
-      vim.cmd("resize 15") -- Resize it
-      vim.api.nvim_set_current_buf(terminal_buf) -- Restore the terminal buffer
-      terminal_win = vim.api.nvim_get_current_win() -- Store the window ID
+      vim.cmd("botright split")
+      vim.cmd("resize 15")
+      vim.api.nvim_set_current_buf(terminal_buf)
+      terminal_win = vim.api.nvim_get_current_win()
     else
-      -- If no existing terminal buffer, open a new one
       open_terminal()
     end
   end
 end
 
+-- Autocommand to automatically close the terminal window and return to the last file
+vim.api.nvim_create_autocmd("TermClose", {
+  pattern = "*",
+  callback = function(args)
+    if args.buf == terminal_buf then
+      if terminal_win and vim.api.nvim_win_is_valid(terminal_win) then
+        vim.api.nvim_win_close(terminal_win, true)
+      end
+      -- Defer the switch so that nvim-tree (or other sidebars) don't steal focus
+      vim.defer_fn(function()
+        if last_win and vim.api.nvim_win_is_valid(last_win) then
+          vim.api.nvim_set_current_win(last_win)
+          vim.api.nvim_set_current_buf(last_buf)
+        elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
+          vim.api.nvim_set_current_buf(last_buf)
+        end
+        terminal_buf = nil
+        terminal_win = nil
+      end, 50)
+    end
+  end,
+})
+
+-- Keybindings:
+-- "t" to open a terminal.
 vim.keymap.set("n", "t", open_terminal, { noremap = true, silent = true })
+-- "<leader>t" to toggle the terminal.
 vim.keymap.set("n", "<leader>t", toggle_terminal, { noremap = true, silent = true })
+
 
 return {
   setup_nvim_tree_keymaps = setup_nvim_tree_keymaps,
