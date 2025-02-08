@@ -22,7 +22,7 @@ map("n", "<leader>bo", ":b#<CR>")
 map("n", "<leader>e", ":NvimTreeToggle<CR>")
 
 map("t", "<Esc>", "<C-\\><C-n>")
-map("n", "t", ":term<CR>")
+--map("n", "t", ":term<CR>")
 map('n', 'm', ':Format<CR>')
 map('v', 'q', ":m '<-2<CR>gv=gv")
 map('v', 'z', ":m '>+1<CR>gv=gv")
@@ -66,7 +66,6 @@ end
 
 -- Map <leader>lr to toggle the LSP references
 map("n", "<leader>lr", toggle_lsp_references)
-
 
 for i = 1, 8 do
   map("n", "<leader>" .. tostring(i), ":BufferLineGoToBuffer " .. i .. "<CR>")
@@ -142,7 +141,46 @@ local function toggle_left_diff_pane()
   end
 end
 
-vim.keymap.set("n", "<leader>m", toggle_left_diff_pane, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>z", toggle_left_diff_pane, { noremap = true, silent = true })
+
+local terminal_buf = nil
+local terminal_win = nil
+local last_buf = nil -- Store the original buffer before opening the terminal
+
+local function open_terminal()
+  last_buf = vim.api.nvim_get_current_buf() -- Save the current buffer
+  vim.cmd("botright split") -- Open a horizontal split at the bottom
+  vim.cmd("resize 15") -- Resize the terminal window
+  vim.cmd("term") -- Open a new terminal
+  terminal_buf = vim.api.nvim_get_current_buf() -- Store the terminal buffer ID
+  terminal_win = vim.api.nvim_get_current_win() -- Store the window ID
+end
+
+local function toggle_terminal()
+  if terminal_win and vim.api.nvim_win_is_valid(terminal_win) then
+    -- If the terminal is visible, hide it and return to the last buffer
+    vim.api.nvim_win_close(terminal_win, true)
+    terminal_win = nil
+    if last_buf and vim.api.nvim_buf_is_valid(last_buf) then
+      vim.api.nvim_set_current_buf(last_buf) -- Switch back to the last buffer
+    end
+  else
+    -- If terminal is closed, reopen it
+    last_buf = vim.api.nvim_get_current_buf() -- Save the current buffer
+    if terminal_buf and vim.api.nvim_buf_is_valid(terminal_buf) then
+      vim.cmd("botright split") -- Open a horizontal split at the bottom
+      vim.cmd("resize 15") -- Resize it
+      vim.api.nvim_set_current_buf(terminal_buf) -- Restore the terminal buffer
+      terminal_win = vim.api.nvim_get_current_win() -- Store the window ID
+    else
+      -- If no existing terminal buffer, open a new one
+      open_terminal()
+    end
+  end
+end
+
+vim.keymap.set("n", "t", open_terminal, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t", toggle_terminal, { noremap = true, silent = true })
 
 return {
   setup_nvim_tree_keymaps = setup_nvim_tree_keymaps,

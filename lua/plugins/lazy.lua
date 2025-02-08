@@ -52,12 +52,5 @@ require("lazy").setup({
   { "saadparwaiz1/cmp_luasnip" },
 
   { "ibhagwan/fzf-lua" },
-
-  { "yetone/avante.nvim",
-    dependencies = {
-      "stevearc/dressing.nvim",
-      "MunifTanjim/nui.nvim",
-    },
-  },
 })
 
