@@ -24,5 +24,5 @@ load_files("plugins", {
 
 -- 全域設定
 load_files("config", {
-		"keybindings",    -- 快捷鍵綁定
+		"keybindings.index",    -- 快捷鍵綁定
 })
