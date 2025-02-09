@@ -54,6 +54,7 @@ end
 
 map("n", "<leader>9", bufferline.jump_to_last_buffer)
 map("n", "<leader>bb", bufferline.switch_to_previous_buffer)
+map("n", "<leader>ba", bufferline.close_all_buffers_except_current)
 
 map("n", "<leader>z", diffview.toggle_left_diff_pane)
 
