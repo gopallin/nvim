@@ -3,10 +3,10 @@ local function map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-local mason = require('config.keybindings.mason')
-local bufferline = require('config.keybindings.bufferline')
-local diffview = require('config.keybindings.diffview')
-local terminal = require('config.keybindings.terminal')
+local mason = require('utility.mason')
+local bufferline = require('utility.bufferline')
+local diffview = require('utility.diffview')
+local terminal = require('utility.terminal')
 
 map({'n', 'v'}, 'gg', 'gg^')
 map({'n', 'v'}, 'G', 'Gg$')

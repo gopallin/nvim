@@ -5,7 +5,7 @@ if not status then
 	return
 end
 
-local keybindings = require("config.keybindings.nvim-tree")
+local keybindings = require("utility.nvim-tree")
 
 nvim_tree.setup({
   on_attach = keybindings.setup_nvim_tree_keymaps,
