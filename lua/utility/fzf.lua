@@ -96,13 +96,20 @@ function M.show_git_blame()
     return
   end
 
-  -- Retrieve the commit message using the commit hash
-  local commit_message = vim.fn.system('git show -s --format=%s ' .. commit_hash)
-  if commit_message and #commit_message > 0 then
-    -- Optionally, trim any trailing newline characters
-    commit_message = commit_message:gsub("%s+$", "")
-    -- Display commit message in the command line
-    vim.api.nvim_echo({{ commit_message, 'Normal' }}, false, {})
+  -- If the commit hash is composed entirely of zeros,
+  -- consider the line as uncommitted
+  if commit_hash:match("^0+$") then
+    vim.api.nvim_echo({{"uncommitted changes", "Normal"}}, false, {})
+    return
+  end
+
+  -- Retrieve the commit details (subject, author name, and relative commit time)
+  local commit_details = vim.fn.system('git show -s --format="%an | %s | %ai" ' .. commit_hash)
+  if commit_details and #commit_details > 0 then
+    -- Trim any trailing newline characters
+    commit_details = commit_details:gsub("%s+$", "")
+    -- Display the commit details in the command line
+    vim.api.nvim_echo({{commit_details, 'Normal'}}, false, {})
   end
 end
 
