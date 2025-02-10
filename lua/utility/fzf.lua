@@ -1,8 +1,35 @@
--- Ensure this is added to your Neovim config (e.g., ~/.config/nvim/lua/config/fzf_diagnostics.lua)
 local M = {}
 
 local fzf = require("fzf-lua")
 local diagnostics = vim.diagnostic
+
+function M.files()
+  fzf.files()
+end
+
+function M.live_grep()
+  fzf.live_grep()
+end
+
+function M.buffers()
+  fzf.buffers()
+end
+
+function M.help_tags()
+  fzf.help_tags()
+end
+
+function M.lsp_implementations()
+  fzf.lsp_implementations()
+end
+
+function M.git_commits()
+  fzf.git_commits()
+end
+
+function M.git_status()
+  fzf.git_status()
+end
 
 -- Custom function to display diagnostics in the current file
 function M.show_diagnostics_in_fzf()

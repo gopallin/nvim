@@ -7,6 +7,7 @@ local mason = require('utility.mason')
 local bufferline = require('utility.bufferline')
 local diffview = require('utility.diffview')
 local terminal = require('utility.terminal')
+local fzf = require('utility.fzf')
 
 map({'n', 'v'}, 'gg', 'gg^')
 map({'n', 'v'}, 'G', 'Gg$')
@@ -32,19 +33,19 @@ map('n', '<C-e>', '7<C-e>')  -- Scroll down
 map('n', '<C-y>', '7<C-y>')  -- Scroll up
 
 -- Files and Search
-map("n", "<leader>fe", ":lua require('config.fzf-diagnostics').show_diagnostics_in_fzf()<CR>")
-map("n", "<leader>ff", "<cmd>lua require('fzf-lua').files()<CR>")       -- Find files
-map("n", "<leader>fg", "<cmd>lua require('fzf-lua').live_grep()<CR>")   -- Live grep
-map("n", "<leader>fb", "<cmd>lua require('fzf-lua').buffers()<CR>")     -- Open buffers
-map("n", "<leader>fh", "<cmd>lua require('fzf-lua').help_tags()<CR>")   -- Help tags
+map("n", "<leader>fe", fzf.show_diagnostics_in_fzf)
+map("n", "<leader>ff", fzf.files)
+map("n", "<leader>fg", fzf.live_grep)
+map("n", "<leader>fb", fzf.buffers)
+map("n", "<leader>fh", fzf.help_tags)
 
 -- Git integration
-map("n", "<leader>gc", "<cmd>lua require('fzf-lua').git_commits()<CR>") -- Git commits
-map("n", "<leader>gs", "<cmd>lua require('fzf-lua').git_status()<CR>")  -- Git status
+map("n", "<leader>gc", fzf.git_commits)
+map("n", "<leader>gs", fzf.git_status)
 
 -- LSP-related keybindings
 map("n", "<leader>ld", vim.lsp.buf.definition) -- Go to LSP definition directly
-map("n", "<leader>li", "<cmd>lua require('fzf-lua').lsp_implementations()<CR>") -- LSP implementations
+map("n", "<leader>li", fzf.lsp_implementations)
 -- Map <leader>lr to toggle the LSP references
 map("n", "<leader>lr", mason.toggle_lsp_references)
 
