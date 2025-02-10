@@ -122,15 +122,14 @@ function M.show_git_blame()
 
   -- Get cursor position
   local win_width = vim.api.nvim_get_option("columns")
-  local win_height = vim.api.nvim_get_option("lines")
   local opts = {
-    relative = "cursor",
-    row = 1, -- Slightly below the cursor
-    col = 0,
-    width = math.min(#message + 2, win_width - 4), -- Limit width to prevent overflow
+    relative = "editor",
+    row = 1,
+    col = vim.o.columns - win_width - 2,
+    width = win_width,
     height = 1,
     style = "minimal",
-    border = "rounded",
+    border = nil,
   }
 
   blame_win = vim.api.nvim_open_win(buf, false, opts)
