@@ -121,11 +121,12 @@ function M.show_git_blame()
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, { message })
 
   -- Get cursor position
-  local win_width = vim.api.nvim_get_option("columns")
+  local win_width = #message + 2  -- Calculate window width dynamically
+  local max_width = vim.o.columns -- Get the total width of Neovim
   local opts = {
     relative = "editor",
     row = 1,
-    col = vim.o.columns - win_width - 2,
+    col = max_width - win_width,
     width = win_width,
     height = 1,
     style = "minimal",
