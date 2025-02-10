@@ -42,6 +42,7 @@ map("n", "<leader>fh", fzf.help_tags)
 -- Git integration
 map("n", "<leader>gc", fzf.git_commits)
 map("n", "<leader>gs", fzf.git_status)
+map("n", "<leader>gb", fzf.show_git_blame)
 
 -- LSP-related keybindings
 map("n", "<leader>ld", vim.lsp.buf.definition) -- Go to LSP definition directly

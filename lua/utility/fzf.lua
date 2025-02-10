@@ -76,8 +76,9 @@ end
 
 function M.show_git_blame()
   -- Get the current file relative to the working directory
-  local file = vim.fn.expand('%')
-  if file == "" then
+  local file = vim.fn.expand('%:p')
+  -- If there’s no valid file (for instance, in nvim-tree or a scratch buffer), return early.
+  if file == "" or vim.fn.filereadable(file) == 0 then
     return
   end
 
@@ -114,4 +115,3 @@ function M.show_git_blame()
 end
 
 return M
-
