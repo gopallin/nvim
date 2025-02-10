@@ -74,44 +74,77 @@ function M.show_diagnostics_in_fzf()
   })
 end
 
+local blame_win = nil -- Store the floating window ID
+
 function M.show_git_blame()
-  -- Get the current file relative to the working directory
+  -- Close any existing floating window first
+  if blame_win and vim.api.nvim_win_is_valid(blame_win) then
+    vim.api.nvim_win_close(blame_win, true)
+  end
+
+  -- Get the full path of the current buffer
   local file = vim.fn.expand('%:p')
-  -- If there’s no valid file (for instance, in nvim-tree or a scratch buffer), return early.
   if file == "" or vim.fn.filereadable(file) == 0 then
     return
   end
 
+  -- Ignore buffers like NvimTree
+  if vim.bo.filetype == "NvimTree" then
+    return
+  end
+
   local line_number = vim.fn.line('.')
-  -- Build the git blame command including the file name
-  local blame_cmd = string.format('git blame -L %d,%d --porcelain %s', line_number, line_number, file)
+  local blame_cmd = string.format('git blame -L %d,%d --porcelain -- %s', line_number, line_number, file)
   local blame_output = vim.fn.systemlist(blame_cmd)
 
   if not blame_output or #blame_output == 0 then
     return
   end
 
-  -- Extract the commit hash from the first line of the blame output
+  -- Extract commit hash
   local commit_hash = string.match(blame_output[1], "^%w+")
   if not commit_hash then
     return
   end
 
-  -- If the commit hash is composed entirely of zeros,
-  -- consider the line as uncommitted
+  -- Handle uncommitted changes
+  local message
   if commit_hash:match("^0+$") then
-    vim.api.nvim_echo({{"uncommitted changes", "Normal"}}, false, {})
-    return
+    message = "uncommitted changes"
+  else
+    message = vim.fn.system('git show -s --format="%an | %s | %h | %ai" ' .. commit_hash)
+    message = message:gsub("%s+$", "") -- Trim whitespace
   end
 
-  -- Retrieve the commit details (subject, author name, and relative commit time)
-  local commit_details = vim.fn.system('git show -s --format="%an | %s | %ai" ' .. commit_hash)
-  if commit_details and #commit_details > 0 then
-    -- Trim any trailing newline characters
-    commit_details = commit_details:gsub("%s+$", "")
-    -- Display the commit details in the command line
-    vim.api.nvim_echo({{commit_details, 'Normal'}}, false, {})
-  end
+  -- Display message in a floating window
+  local buf = vim.api.nvim_create_buf(false, true) -- Create a scratch buffer
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { message })
+
+  -- Get cursor position
+  local win_width = vim.api.nvim_get_option("columns")
+  local win_height = vim.api.nvim_get_option("lines")
+  local opts = {
+    relative = "cursor",
+    row = 1, -- Slightly below the cursor
+    col = 0,
+    width = math.min(#message + 2, win_width - 4), -- Limit width to prevent overflow
+    height = 1,
+    style = "minimal",
+    border = "rounded",
+  }
+
+  blame_win = vim.api.nvim_open_win(buf, false, opts)
+
+  -- Close floating window when the cursor moves
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    callback = function()
+      if blame_win and vim.api.nvim_win_is_valid(blame_win) then
+        vim.api.nvim_win_close(blame_win, true)
+        blame_win = nil
+      end
+    end,
+    once = true
+  })
 end
 
 return M
