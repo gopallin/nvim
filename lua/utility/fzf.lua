@@ -74,5 +74,37 @@ function M.show_diagnostics_in_fzf()
   })
 end
 
+function M.show_git_blame()
+  -- Get the current file relative to the working directory
+  local file = vim.fn.expand('%')
+  if file == "" then
+    return
+  end
+
+  local line_number = vim.fn.line('.')
+  -- Build the git blame command including the file name
+  local blame_cmd = string.format('git blame -L %d,%d --porcelain %s', line_number, line_number, file)
+  local blame_output = vim.fn.systemlist(blame_cmd)
+
+  if not blame_output or #blame_output == 0 then
+    return
+  end
+
+  -- Extract the commit hash from the first line of the blame output
+  local commit_hash = string.match(blame_output[1], "^%w+")
+  if not commit_hash then
+    return
+  end
+
+  -- Retrieve the commit message using the commit hash
+  local commit_message = vim.fn.system('git show -s --format=%s ' .. commit_hash)
+  if commit_message and #commit_message > 0 then
+    -- Optionally, trim any trailing newline characters
+    commit_message = commit_message:gsub("%s+$", "")
+    -- Display commit message in the command line
+    vim.api.nvim_echo({{ commit_message, 'Normal' }}, false, {})
+  end
+end
+
 return M
 
