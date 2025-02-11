@@ -27,4 +27,12 @@ mason_lspconfig.setup({
 })
 
 -- Test lspconfig directly
-lspconfig.lua_ls.setup({})
+lspconfig.lua_ls.setup({
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim" },
+      },
+    },
+  },
+})

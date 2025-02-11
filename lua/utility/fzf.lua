@@ -134,17 +134,13 @@ function M.show_git_blame()
   }
 
   blame_win = vim.api.nvim_open_win(buf, false, opts)
+  end
 
-  -- Close floating window when the cursor moves
-  vim.api.nvim_create_autocmd("CursorMoved", {
-    callback = function()
-      if blame_win and vim.api.nvim_win_is_valid(blame_win) then
-        vim.api.nvim_win_close(blame_win, true)
-        blame_win = nil
-      end
-    end,
-    once = true
-  })
+function M.cleaer_git_blame()
+  if blame_win and vim.api.nvim_win_is_valid(blame_win) then
+    vim.api.nvim_win_close(blame_win, true)
+    blame_win = nil
+  end
 end
 
 return M
