@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
 vim.api.nvim_create_autocmd("CursorMoved", {
   callback = function()
     vim.lsp.buf.clear_references()
-    fzf.cleaer_git_blame()
+    fzf.clear_git_blame()
   end,
 })
 

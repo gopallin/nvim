@@ -2,6 +2,7 @@ local M = {}
 
 local fzf = require("fzf-lua")
 local diagnostics = vim.diagnostic
+local blame_win = nil -- Store the floating window ID
 
 function M.files()
   fzf.files()
@@ -74,8 +75,6 @@ function M.show_diagnostics_in_fzf()
   })
 end
 
-local blame_win = nil -- Store the floating window ID
-
 function M.show_git_blame()
   -- Close any existing floating window first
   if blame_win and vim.api.nvim_win_is_valid(blame_win) then
@@ -85,6 +84,7 @@ function M.show_git_blame()
   -- Get the full path of the current buffer
   local file = vim.fn.expand('%:p')
   if file == "" or vim.fn.filereadable(file) == 0 then
+    vim.notify("No valid file detected!", vim.log.levels.WARN)
     return
   end
 
@@ -97,8 +97,11 @@ function M.show_git_blame()
   local blame_cmd = string.format('git blame -L %d,%d --porcelain -- %s', line_number, line_number, file)
   local blame_output = vim.fn.systemlist(blame_cmd)
 
-  if not blame_output or #blame_output == 0 then
-    return
+  -- Handle Git command errors
+  if not blame_output or #blame_output == 0 or blame_output[1]:match("^fatal:") then
+    local error_message = "Git command error: " .. (blame_output[1] or "Unknown error")
+    vim.notify(error_message, vim.log.levels.ERROR)
+    blame_output = { error_message } -- Replace output with error message
   end
 
   -- Extract commit hash
@@ -113,30 +116,37 @@ function M.show_git_blame()
     message = "uncommitted changes"
   else
     message = vim.fn.system('git show -s --format="%an | %s | %h | %ai" ' .. commit_hash)
-    message = message:gsub("%s+$", "") -- Trim whitespace
+    if message:match("^fatal:") then
+      message = "Git command error: " .. message:gsub("%s+$", "") -- Trim whitespace
+    else
+      message = message:gsub("%s+$", "") -- Trim whitespace
+    end
   end
 
   -- Display message in a floating window
   local buf = vim.api.nvim_create_buf(false, true) -- Create a scratch buffer
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { message })
+  
+  -- Split message into lines to avoid newlines within an item
+  local message_lines = vim.split(message, "\n", { plain = true })
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, message_lines)
 
   -- Get cursor position
-  local win_width = #message + 2  -- Calculate window width dynamically
+  local win_width = math.max(30, #message + 2) -- Minimum width of 30
   local max_width = vim.o.columns -- Get the total width of Neovim
   local opts = {
     relative = "editor",
     row = 1,
     col = max_width - win_width,
     width = win_width,
-    height = 1,
+    height = #message_lines, -- set height based on number of lines
     style = "minimal",
     border = nil,
   }
 
   blame_win = vim.api.nvim_open_win(buf, false, opts)
-  end
+end
 
-function M.cleaer_git_blame()
+function M.clear_git_blame()
   if blame_win and vim.api.nvim_win_is_valid(blame_win) then
     vim.api.nvim_win_close(blame_win, true)
     blame_win = nil
