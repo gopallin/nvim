@@ -1,17 +1,20 @@
--- diffview.lua
 local status, diffview = pcall(require, "diffview")
 if not status then
  vim.notify("diffview not found")
  return
 end
 
+local diffviewUtility = require('utility.diffview')
+
 diffview.setup({
 	keymaps = {
     view = {
       ["<leader>e"] = "<cmd>DiffviewToggleFiles<CR>",
+      ["<leader>z"] = diffviewUtility.toggle_left_diff_pane,
     },
     file_panel = {
       ["<leader>e"] = "<cmd>DiffviewToggleFiles<CR>",
+      ["<leader>z"] = diffviewUtility.toggle_left_diff_pane,
     },
   },
 	hooks = {
