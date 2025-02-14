@@ -5,7 +5,6 @@ end
 
 local mason = require('utility.mason')
 local bufferline = require('utility.bufferline')
-local diffview = require('utility.diffview')
 local terminal = require('utility.terminal')
 local fzf = require('utility.fzf')
 
@@ -14,10 +13,6 @@ map({'n', 'v'}, 'G', 'Gg$')
 
 map("n", "<leader>do", ":DiffviewOpen<CR>")
 map("n", "<leader>dc", ":DiffviewClose<CR>")
-
-map("n", "<leader>be", ":bnext<CR>")
-map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
-map("n", "<leader>bo", ":b#<CR>")
 
 map("n", "<leader>e", ":NvimTreeToggle<CR>")
 
@@ -56,7 +51,10 @@ end
 
 map("n", "<leader>9", bufferline.jump_to_last_buffer)
 map("n", "<leader>bb", bufferline.switch_to_previous_buffer)
-map("n", "<leader>ba", bufferline.close_all_buffers_except_current)
+map("n", "<leader>ba", ":BufferLineCloseOthers<CR>")
+map("n", "<leader>be", ":bnext<CR>")
+map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
+map("n", "<leader>bo", ":b#<CR>")
 
 map("n", "t", terminal.open_terminal)
 map("n", "<leader>t", terminal.toggle_terminal)
