@@ -1,24 +1,60 @@
 local M = {}
 
-local terminal_buf = nil
-local terminal_win = nil
-local last_buf = nil   -- the file buffer you were in
-local last_win = nil   -- the window where that file was displayed
+-- Table to track multiple terminal sessions.
+-- Each session is a table: { buf = <buffer id>, win = <window id or nil>, last_active = <timestamp> }
+local terminals = {}
 
--- Helper: determine if a buffer is a “real” file (and not nvim-tree, etc.)
+local last_buf = nil  -- last active file buffer (to restore when toggling off)
+local last_win = nil  -- last active file window
+
+-- Helper: determine if a buffer is a "real" file (and not, e.g., nvim-tree)
 local function is_real_buffer(buf)
   local ft = vim.bo[buf].filetype
   return ft ~= "NvimTree" and ft ~= ""
 end
 
-local function open_terminal()
-  -- capture the original file buffer/window only if it’s a real buffer.
+-- Helper: Check if a given window is at (or near) the bottom of the screen.
+local function is_bottom_window(win)
+  local pos = vim.fn.win_screenpos(win)  -- returns {row, col} of the window's top-left corner
+  local height = vim.api.nvim_win_get_height(win)
+  local bottom = pos[1] + height - 1
+  local total_rows = vim.o.lines - vim.o.cmdheight
+  return bottom >= total_rows - 1  -- allow a margin of 1 line
+end
+
+-- Look through our sessions and return the one whose window is visible at the bottom.
+local function get_bottom_terminal_session()
+  for _, session in ipairs(terminals) do
+    if session.win and vim.api.nvim_win_is_valid(session.win) then
+      if is_bottom_window(session.win) then
+        return session
+      end
+    end
+  end
+  return nil
+end
+
+-- Look for the most-recently active session that is not currently visible (win is nil or invalid)
+local function get_last_inactive_terminal_session()
+  local candidate = nil
+  for _, session in ipairs(terminals) do
+    if not (session.win and vim.api.nvim_win_is_valid(session.win)) then
+      if not candidate or session.last_active > candidate.last_active then
+        candidate = session
+      end
+    end
+  end
+  return candidate
+end
+
+-- Helper: Create a new terminal session at the bottom.
+local function open_new_terminal()
+  -- Capture the current file buffer/window if it’s a "real" file.
   local cur_buf = vim.api.nvim_get_current_buf()
   if is_real_buffer(cur_buf) then
     last_buf = cur_buf
     last_win = vim.api.nvim_get_current_win()
   else
-    -- if the current buffer isn’t a “real” file, try to find one
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       local buf = vim.api.nvim_win_get_buf(win)
       if is_real_buffer(buf) then
@@ -32,82 +68,81 @@ local function open_terminal()
   vim.cmd("botright split")
   vim.cmd("resize 15")
   vim.cmd("term")
-  terminal_buf = vim.api.nvim_get_current_buf()
-  terminal_win = vim.api.nvim_get_current_win()
+  local buf = vim.api.nvim_get_current_buf()
+  local win = vim.api.nvim_get_current_win()
+  local session = { buf = buf, win = win, last_active = os.time() }
+  table.insert(terminals, session)
 end
 
+-- open_terminal(): When pressing "t"
+-- If a terminal is already visible at the bottom, do nothing.
+-- Otherwise, always create a new terminal at the bottom.
+local function open_terminal()
+  if get_bottom_terminal_session() then
+    return
+  end
+  open_new_terminal()
+end
+
+-- toggle_terminal(): When pressing "<leader>t"
+-- 1. If a terminal is visible at the bottom, close it and update its last_active time.
+-- 2. If no terminal is visible, then check for an existing inactive session.
+--    If one exists, re-open that session at the bottom.
+-- 3. Otherwise, create a new terminal session.
 local function toggle_terminal()
-  if terminal_win and vim.api.nvim_win_is_valid(terminal_win) then
-    vim.api.nvim_win_close(terminal_win, true)
-    terminal_win = nil
-    -- Use vim.schedule to run the restore after the terminal is closed.
+  local bottom_session = get_bottom_terminal_session()
+  if bottom_session then
+    -- Terminal is visible: close its window.
+    if vim.api.nvim_win_is_valid(bottom_session.win) then
+      vim.api.nvim_win_close(bottom_session.win, true)
+    end
+    bottom_session.win = nil
+    bottom_session.last_active = os.time()
     vim.schedule(function()
       if last_win and vim.api.nvim_win_is_valid(last_win) then
-        local buf = vim.api.nvim_win_get_buf(last_win)
-        -- if the saved window is showing nvim-tree, try to find another valid window.
-        if not is_real_buffer(buf) then
-          for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local b = vim.api.nvim_win_get_buf(win)
-            if is_real_buffer(b) then
-              last_win = win
-              last_buf = b
-              break
-            end
-          end
-        end
         vim.api.nvim_set_current_win(last_win)
         vim.api.nvim_set_current_buf(last_buf)
       elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
         vim.api.nvim_set_current_buf(last_buf)
       end
     end)
-  else
-    -- (Re)capture the original file buffer/window (if possible) before opening terminal.
-    local cur_buf = vim.api.nvim_get_current_buf()
-    if is_real_buffer(cur_buf) then
-      last_buf = cur_buf
-      last_win = vim.api.nvim_get_current_win()
-    end
-
-    if terminal_buf and vim.api.nvim_buf_is_valid(terminal_buf) then
-      vim.cmd("botright split")
-      vim.cmd("resize 15")
-      vim.api.nvim_set_current_buf(terminal_buf)
-      terminal_win = vim.api.nvim_get_current_win()
-    else
-      open_terminal()
-    end
+    return
   end
+
+  -- No terminal currently visible at the bottom.
+  -- Check if we have an inactive (existing) terminal session.
+  local inactive = get_last_inactive_terminal_session()
+  if inactive and vim.api.nvim_buf_is_valid(inactive.buf) then
+    vim.cmd("botright split")
+    vim.cmd("resize 15")
+    vim.api.nvim_set_current_buf(inactive.buf)
+    inactive.win = vim.api.nvim_get_current_win()
+    return
+  end
+
+  -- No inactive session available, so create a new terminal.
+  open_new_terminal()
 end
 
--- This callback is triggered when the terminal buffer is closed (for example, when you type "exit")
+-- Callback: Triggered when a terminal buffer is closed (e.g. user types "exit")
 local function close_terminal_callback(args)
-  if args.buf == terminal_buf then
-    if terminal_win and vim.api.nvim_win_is_valid(terminal_win) then
-      vim.api.nvim_win_close(terminal_win, true)
-    end
-    vim.schedule(function()
-      if last_win and vim.api.nvim_win_is_valid(last_win) then
-        local buf = vim.api.nvim_win_get_buf(last_win)
-        if not is_real_buffer(buf) then
-          for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local b = vim.api.nvim_win_get_buf(win)
-            if is_real_buffer(b) then
-              last_win = win
-              last_buf = b
-              break
-            end
-          end
-        end
-        vim.api.nvim_set_current_win(last_win)
-        vim.api.nvim_set_current_buf(last_buf)
-      elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
-        vim.api.nvim_set_current_buf(last_buf)
+  for i, session in ipairs(terminals) do
+    if session.buf == args.buf then
+      if session.win and vim.api.nvim_win_is_valid(session.win) then
+        vim.api.nvim_win_close(session.win, true)
       end
-      terminal_buf = nil
-      terminal_win = nil
-    end)
+      table.remove(terminals, i)
+      break
+    end
   end
+  vim.schedule(function()
+    if last_win and vim.api.nvim_win_is_valid(last_win) then
+      vim.api.nvim_set_current_win(last_win)
+      vim.api.nvim_set_current_buf(last_buf)
+    elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
+      vim.api.nvim_set_current_buf(last_buf)
+    end
+  end)
 end
 
 M.open_terminal = open_terminal
@@ -115,4 +150,3 @@ M.toggle_terminal = toggle_terminal
 M.close_terminal_callback = close_terminal_callback
 
 return M
-
