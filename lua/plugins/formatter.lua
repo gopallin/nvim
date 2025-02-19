@@ -5,10 +5,10 @@ if not status then
  return
 end
 
-      formatter.setup({
-        logging = true,
-        log_level = vim.log.levels.WARN,
-        filetype = {
+formatter.setup({
+  logging = true,
+  log_level = vim.log.levels.WARN,
+  filetype = {
     -- any filetype
     ["*"] = {
       -- "formatter.filetypes.any" defines default configurations for any
@@ -17,5 +17,5 @@ end
       -- Remove trailing whitespace without 'sed'
       -- require("formatter.filetypes.any").substitute_trailing_whitespace,
     }
-        },
-      })
+  },
+})

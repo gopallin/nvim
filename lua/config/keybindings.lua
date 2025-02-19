@@ -53,7 +53,7 @@ map("n", "<leader>9", bufferline.jump_to_last_buffer)
 map("n", "<leader>bb", bufferline.switch_to_previous_buffer)
 map("n", "<leader>ba", ":BufferLineCloseOthers<CR>")
 map("n", "<leader>be", ":bnext<CR>")
-map("n", "<leader>bd", ":bprevious<CR>:bd#<CR>")
+map("n", "<leader>bd", ":bd#<CR><leader>bb")
 map("n", "<leader>bo", ":b#<CR>")
 
 map("n", "t", terminal.open_terminal)
