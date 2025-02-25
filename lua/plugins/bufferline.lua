@@ -23,32 +23,32 @@ bufferline.setup({
     show_buffer_close_icons = false,
     show_close_icon = false,
     separator_style = "slant", -- Separator style
-  },
-  highlights = {
-    -- Highlight for the selected buffer
-    buffer_selected = {
-      fg = "#FFFFFF", -- Text color for the selected buffer
-      bg = "#99a3e0", -- Background color for the selected buffer
-      bold = true,    -- Make the text bold
-      italic = false, -- Disable italic
-    },
-    -- Highlight for unselected buffers
-    buffer_visible = {
-      fg = "#AAAAAA", -- Text color for visible but not selected buffers
-      bg = "#3b3f51", -- Background color for unselected buffers
-    },
-    -- Highlight for the fill area in the bufferline
-    fill = {
-      bg = "#282A36", -- Background color for the bufferline fill
-    },
-    -- Highlight for the tab separator
-    separator_selected = {
-      fg = "#99a3e0", -- Same as `buffer_selected.bg` for seamless look
-      bg = "#282A36", -- Match `fill.bg`
-    },
-    separator_visible = {
-      fg = "#3b3f51", -- Same as `buffer_visible.bg`
-      bg = "#282A36", -- Match `fill.bg`
+    groups = {
+      options = {
+          toggle_hidden_on_enter = true, -- Reopen hidden groups when entering
+      },
+      items = {
+        {
+            name = "Files", -- Group name for general files
+            highlight = { underline = true, sp = "#99a3e0" }, -- Visual distinction
+            priority = 1, -- Higher priority appears first
+            matcher = function(buf)
+                -- Use buffer ID to check if it's not a terminal
+                local buftype = vim.api.nvim_buf_get_option(buf.id, "buftype")
+                return buftype ~= "terminal"
+            end,
+        },
+        {
+            name = "Terminals", -- Group name for terminals
+            highlight = { underline = true, sp = "#FF5555" }, -- Different color for terminals
+            priority = 2, -- Lower priority appears after Files
+            matcher = function(buf)
+                -- Use buffer ID to check if it's a terminal
+                local buftype = vim.api.nvim_buf_get_option(buf.id, "buftype")
+                return buftype == "terminal"
+            end,
+        },
+      },
     },
   },
 })

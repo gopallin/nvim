@@ -23,9 +23,11 @@ map('v', 'z', ":m '>+1<CR>gv=gv")
 map('v', '<Tab>', '>gv')
 map('v', '<S-Tab>', '<gv')
 
+map("x", "p", '"0p')
+
 -- Scroll viewport without moving cursor
-map('n', '<C-e>', '7<C-e>')  -- Scroll down
-map('n', '<C-y>', '7<C-y>')  -- Scroll up
+map('n', '<C-e>', '9<C-e>')  -- Scroll down
+map('n', '<C-y>', '9<C-y>')  -- Scroll up
 
 -- Files and Search
 map("n", "<leader>fe", fzf.show_diagnostics_in_fzf)
@@ -53,7 +55,7 @@ map("n", "<leader>9", bufferline.jump_to_last_buffer)
 map("n", "<leader>bb", bufferline.switch_to_previous_buffer)
 map("n", "<leader>ba", ":BufferLineCloseOthers<CR>")
 map("n", "<leader>be", ":bnext<CR>")
-map("n", "<leader>bd", ":bd#<CR><leader>bb")
+map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
 map("n", "<leader>bo", ":b#<CR>")
 
 map("n", "t", terminal.open_terminal)
