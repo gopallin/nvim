@@ -93,17 +93,30 @@ local function toggle_terminal()
   local bottom_session = get_bottom_terminal_session()
   if bottom_session then
     -- Terminal is visible: close its window.
-    if vim.api.nvim_win_is_valid(bottom_session.win) then
+    if vim.api.nvim_win_is_valid(bottom_session.win) then  -- Note: Fixed typo (custom_session -> bottom_session)
       vim.api.nvim_win_close(bottom_session.win, true)
     end
     bottom_session.win = nil
     bottom_session.last_active = os.time()
     vim.schedule(function()
-      if last_win and vim.api.nvim_win_is_valid(last_win) then
+      -- Try to restore last_win/last_buf if valid, otherwise find a valid buffer
+      if last_win and vim.api.nvim_win_is_valid(last_win) and last_buf and vim.api.nvim_buf_is_valid(last_buf) then
         vim.api.nvim_set_current_win(last_win)
         vim.api.nvim_set_current_buf(last_buf)
       elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
         vim.api.nvim_set_current_buf(last_buf)
+      else
+        -- Fallback: Switch to any valid non-terminal buffer
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          local buf = vim.api.nvim_win_get_buf(win)
+          if is_real_buffer(buf) and vim.api.nvim_buf_is_valid(buf) then
+            vim.api.nvim_set_current_win(win)
+            vim.api.nvim_set_current_buf(buf)
+            last_buf = buf
+            last_win = win
+            break
+          end
+        end
       end
     end)
     return
@@ -132,15 +145,32 @@ local function close_terminal_callback(args)
         vim.api.nvim_win_close(session.win, true)
       end
       table.remove(terminals, i)
+      -- Update last_buf/last_win if they match the closed buffer
+      if last_buf == args.buf then
+        last_buf = nil
+        last_win = nil
+      end
       break
     end
   end
   vim.schedule(function()
-    if last_win and vim.api.nvim_win_is_valid(last_win) then
+    if last_win and vim.api.nvim_win_is_valid(last_win) and last_buf and vim.api.nvim_buf_is_valid(last_buf) then
       vim.api.nvim_set_current_win(last_win)
       vim.api.nvim_set_current_buf(last_buf)
     elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
       vim.api.nvim_set_current_buf(last_buf)
+    else
+      -- Fallback: Switch to any valid non-terminal buffer
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        if is_real_buffer(buf) and vim.api.nvim_buf_is_valid(buf) then
+          vim.api.nvim_set_current_win(win)
+          vim.api.nvim_set_current_buf(buf)
+          last_buf = buf
+          last_win = win
+          break
+        end
+      end
     end
   end)
 end

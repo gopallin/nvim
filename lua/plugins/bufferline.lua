@@ -29,24 +29,22 @@ bufferline.setup({
       },
       items = {
         {
-            name = "Files", -- Group name for general files
-            highlight = { underline = true, sp = "#99a3e0" }, -- Visual distinction
-            priority = 1, -- Higher priority appears first
-            matcher = function(buf)
-                -- Use buffer ID to check if it's not a terminal
-                local buftype = vim.api.nvim_buf_get_option(buf.id, "buftype")
-                return buftype ~= "terminal"
-            end,
+          name = "Terminals", -- Group name for terminals
+          priority = 2, -- Lower priority appears after Files
+          matcher = function(buf)
+              -- Use buffer ID to check if it's a terminal
+              local buftype = vim.api.nvim_buf_get_option(buf.id, "buftype")
+              return buftype == "terminal"
+          end,
         },
         {
-            name = "Terminals", -- Group name for terminals
-            highlight = { underline = true, sp = "#FF5555" }, -- Different color for terminals
-            priority = 2, -- Lower priority appears after Files
-            matcher = function(buf)
-                -- Use buffer ID to check if it's a terminal
-                local buftype = vim.api.nvim_buf_get_option(buf.id, "buftype")
-                return buftype == "terminal"
-            end,
+          name = "Files", -- Group name for general files
+          priority = 1, -- Higher priority appears first
+          matcher = function(buf)
+              -- Use buffer ID to check if it's not a terminal
+              local buftype = vim.api.nvim_buf_get_option(buf.id, "buftype")
+              return buftype ~= "terminal"
+          end,
         },
       },
     },
