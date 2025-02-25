@@ -53,6 +53,7 @@ end
 
 map("n", "<leader>9", bufferline.jump_to_last_buffer)
 map("n", "<leader>bb", bufferline.switch_to_previous_buffer)
+map("n", "<leader>bg", bufferline.close_others_in_group)
 map("n", "<leader>ba", ":BufferLineCloseOthers<CR>")
 map("n", "<leader>be", ":bnext<CR>")
 map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
