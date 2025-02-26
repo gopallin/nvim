@@ -1,4 +1,5 @@
 local bufferline_config = require('plugins.bufferline') -- Adjust path to your bufferline.lua
+local bufferline = require('bufferline')
 
 local M = {}
 
@@ -17,13 +18,12 @@ local function switch_to_previous_buffer()
 end
 
 local function close_others_in_group()
-    local bufferline_api = require("bufferline")
     local current_buf = vim.api.nvim_get_current_buf()
     local current_buftype = vim.api.nvim_buf_get_option(current_buf, "buftype")
     local is_terminal = current_buftype == "terminal"
 
     -- Get all buffers from bufferline
-    local buffers = bufferline_api.get_elements().elements
+    local buffers = bufferline.get_elements().elements
 
     for _, buf in ipairs(buffers) do
         local buf_id = buf.id
