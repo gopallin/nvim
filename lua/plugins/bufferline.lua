@@ -23,6 +23,11 @@ bufferline.setup({
     show_buffer_close_icons = false,
     show_close_icon = false,
     separator_style = "slant", -- Separator style
+    custom_filter = function(buf)
+        local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+        -- Show all buffers except terminal buffers in the bufferline
+        return buftype ~= "terminal"
+    end,
     groups = {
       options = {
           toggle_hidden_on_enter = true, -- Reopen hidden groups when entering
@@ -38,7 +43,7 @@ bufferline.setup({
           end,
         },
         {
-          name = "Files", -- Group name for general files
+          name = "ht toggle termainal", -- Group name for general files
           priority = 1, -- Higher priority appears first
           matcher = function(buf)
               -- Use buffer ID to check if it's not a terminal
