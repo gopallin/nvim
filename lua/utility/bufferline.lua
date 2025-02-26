@@ -1,3 +1,5 @@
+local bufferline_config = require('plugins.bufferline') -- Adjust path to your bufferline.lua
+
 local M = {}
 
 local function jump_to_last_buffer()
@@ -36,8 +38,16 @@ local function close_others_in_group()
     end
 end
 
+local function toggle_terminal_buffers()
+    _G.show_terminals = not _G.show_terminals
+    bufferline_config.configure_bufferline()
+    vim.cmd('redrawtabline')
+    vim.notify("Terminal buffers " .. (_G.show_terminals and "shown" or "hidden"))
+end
+
 M.jump_to_last_buffer = jump_to_last_buffer
 M.switch_to_previous_buffer = switch_to_previous_buffer
 M.close_others_in_group = close_others_in_group
+M.toggle_terminal_buffers = toggle_terminal_buffers
 
 return M

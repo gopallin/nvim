@@ -60,3 +60,4 @@ map("n", "<leader>bo", ":b#<CR>")
 
 map("n", "t", terminal.open_terminal)
 map("n", "<leader>t", terminal.toggle_terminal)
+map('n', '<leader>ht', bufferline.toggle_terminal_buffers)
