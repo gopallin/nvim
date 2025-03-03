@@ -23,4 +23,5 @@ load_files("plugins", {
 load_files("config", {
 		"keybindings",
 		"autocmds",
+		"styles",
 })
