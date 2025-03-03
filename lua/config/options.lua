@@ -1,7 +1,3 @@
-vim.cmd("colorscheme vim")
---vim.cmd("colorscheme habamax")
-vim.cmd("highlight Cursor guibg=grey")
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 

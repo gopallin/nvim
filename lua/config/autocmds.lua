@@ -25,14 +25,6 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*",
-  callback = function()
-    --vim.cmd("highlight CursorLine ctermbg=lightgrey guibg=lightgrey")
-    --vim.cmd("highlight CursorColumn ctermbg=lightgrey guibg=lightgrey")
-  end,
-})
-
 vim.api.nvim_create_autocmd("CursorHold", {
   pattern = "*",
   callback = function()
