@@ -91,22 +91,29 @@ end
 -- 3. Otherwise, create a new terminal session.
 local function toggle_terminal()
   local bottom_session = get_bottom_terminal_session()
+
+  -- Save the current window and buffer before switching to the terminal
+  if not bottom_session then
+    last_win = vim.api.nvim_get_current_win()
+    last_buf = vim.api.nvim_get_current_buf()
+  end
+
   if bottom_session then
-    -- Terminal is visible: close its window.
-    if vim.api.nvim_win_is_valid(bottom_session.win) then  -- Note: Fixed typo (custom_session -> bottom_session)
+    if vim.api.nvim_win_is_valid(bottom_session.win) then
       vim.api.nvim_win_close(bottom_session.win, true)
     end
     bottom_session.win = nil
     bottom_session.last_active = os.time()
+
     vim.schedule(function()
-      -- Try to restore last_win/last_buf if valid, otherwise find a valid buffer
+      -- Restore last active buffer/window
       if last_win and vim.api.nvim_win_is_valid(last_win) and last_buf and vim.api.nvim_buf_is_valid(last_buf) then
         vim.api.nvim_set_current_win(last_win)
         vim.api.nvim_set_current_buf(last_buf)
       elseif last_buf and vim.api.nvim_buf_is_valid(last_buf) then
         vim.api.nvim_set_current_buf(last_buf)
       else
-        -- Fallback: Switch to any valid non-terminal buffer
+        -- Fallback to any valid non-terminal buffer
         for _, win in ipairs(vim.api.nvim_list_wins()) do
           local buf = vim.api.nvim_win_get_buf(win)
           if is_real_buffer(buf) and vim.api.nvim_buf_is_valid(buf) then
@@ -122,8 +129,7 @@ local function toggle_terminal()
     return
   end
 
-  -- No terminal currently visible at the bottom.
-  -- Check if we have an inactive (existing) terminal session.
+  -- No terminal currently visible, check for an inactive session.
   local inactive = get_last_inactive_terminal_session()
   if inactive and vim.api.nvim_buf_is_valid(inactive.buf) then
     vim.cmd("botright split")
@@ -133,7 +139,7 @@ local function toggle_terminal()
     return
   end
 
-  -- No inactive session available, so create a new terminal.
+  -- No inactive session available, create a new terminal.
   open_new_terminal()
 end
 

@@ -15,6 +15,7 @@ vim.o.expandtab = true
 
 vim.opt.clipboard = "unnamedplus"
 vim.opt.number = true
+vim.opt.relativenumber = true
 
 vim.o.showtabline = 2 -- Always show the tabline
 
