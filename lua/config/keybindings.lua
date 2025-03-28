@@ -10,6 +10,7 @@ local fzf = require('utility.fzf')
 
 map({'n', 'v'}, 'gg', 'gg^')
 map({'n', 'v'}, 'G', 'Gg$')
+map({'n', 'v'}, 'x', '"_x')
 
 map("n", "<leader>do", ":DiffviewOpen<CR>")
 map("n", "<leader>dc", ":DiffviewClose<CR>")
