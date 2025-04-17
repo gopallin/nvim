@@ -94,19 +94,19 @@ function M.show_git_blame()
   end
 
   local line_number = vim.fn.line('.')
-  local blame_cmd = string.format('git blame -L %d,%d --porcelain -- %s', line_number, line_number, file)
+  local blame_cmd = string.format('git blame -L %d,%d --porcelain -- %s', line_number, line_number, vim.fn.shellescape(file))
   local blame_output = vim.fn.systemlist(blame_cmd)
 
   -- Handle Git command errors
   if not blame_output or #blame_output == 0 or blame_output[1]:match("^fatal:") then
-    local error_message = "Git command error: " .. (blame_output[1] or "Unknown error")
-    vim.notify(error_message, vim.log.levels.ERROR)
-    blame_output = { error_message } -- Replace output with error message
+    vim.notify("Git Blame Error: File is not tracked or does not exist in HEAD")
+    return
   end
 
   -- Extract commit hash
   local commit_hash = string.match(blame_output[1], "^%w+")
   if not commit_hash then
+    vim.notify("No commit hash found", vim.log.levels.WARN)
     return
   end
 
@@ -140,7 +140,7 @@ function M.show_git_blame()
     width = win_width,
     height = #message_lines, -- set height based on number of lines
     style = "minimal",
-    border = nil,
+    border = "rounded",
   }
 
   blame_win = vim.api.nvim_open_win(buf, false, opts)

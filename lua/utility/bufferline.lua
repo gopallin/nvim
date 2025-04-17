@@ -45,9 +45,16 @@ local function toggle_terminal_buffers()
     vim.notify("Terminal buffers " .. (_G.show_terminals and "shown" or "hidden"))
 end
 
+local function close_current_buffer()
+    local current_buf = vim.api.nvim_get_current_buf() -- Store current buffer
+    switch_to_previous_buffer()
+    vim.api.nvim_buf_delete(current_buf, { force = true }) -- Close stored buffer
+end
+
 M.jump_to_last_buffer = jump_to_last_buffer
 M.switch_to_previous_buffer = switch_to_previous_buffer
 M.close_others_in_group = close_others_in_group
 M.toggle_terminal_buffers = toggle_terminal_buffers
+M.close_current_buffer = close_current_buffer
 
 return M

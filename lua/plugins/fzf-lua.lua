@@ -9,22 +9,22 @@ fzf.setup({
   git = {
     status = {
       cmd = "git status --short --untracked-files=all",
-actions = {
-  ["default"] = function(selected)
-    local file = selected[1]
-    if file then
-      -- Trim leading markers (e.g., " M "), tabs, or whitespace
-      file = file:match("%s*[%w]+%s+(.-)%s*$")
-      if file and #file > 0 then
-        require('diffview').open(file)
-      else
-        vim.notify("Could not parse file name", vim.log.levels.ERROR)
-      end
-    else
-      vim.notify("No file selected", vim.log.levels.ERROR)
-    end
-  end,
-},
+      actions = {
+        ["default"] = function(selected)
+          local file = selected[1]
+          if file then
+            -- Trim leading markers (e.g., " M "), tabs, or whitespace
+            file = file:match("%s*[%w]+%s+(.-)%s*$")
+            if file and #file > 0 then
+              require('diffview').open(file)
+            else
+              vim.notify("Could not parse file name", vim.log.levels.ERROR)
+            end
+          else
+            vim.notify("No file selected", vim.log.levels.ERROR)
+          end
+        end,
+      },
     },
   },
 	keymap = {
