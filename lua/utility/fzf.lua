@@ -125,7 +125,7 @@ function M.show_git_blame()
 
   -- Display message in a floating window
   local buf = vim.api.nvim_create_buf(false, true) -- Create a scratch buffer
-  
+
   -- Split message into lines to avoid newlines within an item
   local message_lines = vim.split(message, "\n", { plain = true })
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, message_lines)

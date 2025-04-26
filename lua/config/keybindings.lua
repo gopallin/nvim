@@ -7,6 +7,7 @@ local mason = require('utility.mason')
 local bufferline = require('utility.bufferline')
 local terminal = require('utility.terminal')
 local fzf = require('utility.fzf')
+local wrap = require('utility.wrap')
 
 map({'n', 'v'}, 'gg', 'gg^')
 map({'n', 'v'}, 'G', 'Gg$')
@@ -63,3 +64,9 @@ map("n", "<leader>bo", ":b#<CR>")
 map("n", "t", terminal.open_terminal)
 map("n", "<leader>t", terminal.toggle_terminal)
 map('n', '<leader>ht', bufferline.toggle_terminal_buffers)
+
+for open, _ in pairs(wrap.pairs) do
+  map('v', open, function()
+    wrap.wrap_selection(open)
+  end)
+end
