@@ -6,6 +6,7 @@ local M = {}
 local function jump_to_last_buffer()
   local last_buffer_index = #vim.fn.getbufinfo({ buflisted = true })
   vim.cmd("BufferLineGoToBuffer " .. last_buffer_index)
+  vim.notify("Goes to buffer " .. last_buffer_index)
 end
 
 local function switch_to_previous_buffer()
@@ -51,10 +52,20 @@ local function close_current_buffer()
     vim.api.nvim_buf_delete(current_buf, { force = true }) -- Close stored buffer
 end
 
+local function jump_to_buffer_at(position)
+  local buffers = bufferline.get_elements().elements
+  local target = buffers[position]
+  if target then
+    vim.api.nvim_set_current_buf(target.id)
+    vim.notify("Goes to buffer " .. position)
+  end
+end
+
 M.jump_to_last_buffer = jump_to_last_buffer
 M.switch_to_previous_buffer = switch_to_previous_buffer
 M.close_others_in_group = close_others_in_group
 M.toggle_terminal_buffers = toggle_terminal_buffers
 M.close_current_buffer = close_current_buffer
+M.jump_to_buffer_at = jump_to_buffer_at
 
 return M

@@ -50,7 +50,7 @@ map("n", "<leader>li", fzf.lsp_implementations)
 map("n", "<leader>lr", mason.toggle_lsp_references)
 
 for i = 1, 8 do
-  map("n", "<leader>" .. tostring(i), ":BufferLineGoToBuffer " .. i .. "<CR>")
+  map("n", "<leader>" .. i, function() bufferline.jump_to_buffer_at(i) end)
 end
 
 map("n", "<leader>9", bufferline.jump_to_last_buffer)
@@ -66,7 +66,5 @@ map("n", "<leader>t", terminal.toggle_terminal)
 map('n', '<leader>ht', bufferline.toggle_terminal_buffers)
 
 for open, _ in pairs(wrap.pairs) do
-  map('v', open, function()
-    wrap.wrap_selection(open)
-  end)
+  map('v', open, function() wrap.wrap_selection(open) end)
 end
