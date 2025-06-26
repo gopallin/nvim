@@ -4,7 +4,6 @@ if not status then
 	return
 end
 
-
 fzf.setup({
   git = {
     status = {

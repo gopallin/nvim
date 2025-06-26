@@ -66,7 +66,7 @@ local function open_new_terminal()
   end
 
   vim.cmd("botright split")
-  vim.cmd("resize 15")
+  vim.cmd("resize 20")
   vim.cmd("term")
   local buf = vim.api.nvim_get_current_buf()
   local win = vim.api.nvim_get_current_win()
@@ -133,7 +133,7 @@ local function toggle_terminal()
   local inactive = get_last_inactive_terminal_session()
   if inactive and vim.api.nvim_buf_is_valid(inactive.buf) then
     vim.cmd("botright split")
-    vim.cmd("resize 15")
+    vim.cmd("resize 20")
     vim.api.nvim_set_current_buf(inactive.buf)
     inactive.win = vim.api.nvim_get_current_win()
     return
