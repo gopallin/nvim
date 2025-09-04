@@ -52,5 +52,7 @@ require("lazy").setup({
   { "saadparwaiz1/cmp_luasnip" },
 
   { "ibhagwan/fzf-lua" },
+
+  { "lukas-reineke/indent-blankline.nvim" },
 })
 
