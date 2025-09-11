@@ -33,7 +33,8 @@ map('n', '<C-y>', '9<C-y>')  -- Scroll up
 
 -- Files and Search
 map("n", "<leader>fe", fzf.show_diagnostics_in_fzf)
-map("n", "<leader>ff", fzf.files)
+map("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
+
 map("n", "<leader>fg", fzf.live_grep)
 map("n", "<leader>fb", fzf.buffers)
 map("n", "<leader>fh", fzf.help_tags)

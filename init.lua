@@ -19,6 +19,7 @@ load_files('plugins', {
   'formatter',
   'fzf-lua',
   'indent-blankline',
+  'telescope',
 })
 
 load_files('config', {
