@@ -14,5 +14,11 @@ telescope.setup({
     sorting_strategy = "ascending",
     sorter = require("telescope.sorters").get_fuzzy_file(),
     case_mode = "smart_case",
+    mappings = {
+      i = {
+        ["<C-j>"] = "move_selection_next",
+        ["<C-k>"] = "move_selection_previous",
+      },
+    },
   },
 })
