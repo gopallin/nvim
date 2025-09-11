@@ -44,7 +44,7 @@ map("n", "<leader>gs", fzf.git_status)
 map("n", "<leader>gb", fzf.show_git_blame)
 
 -- LSP-related keybindings
-map("n", "<leader>ld", vim.lsp.buf.definition) -- Go to LSP definition directly
+map("n", "<leader>ld", "<C-]>") -- Go to LSP definition directly
 map("n", "<leader>li", fzf.lsp_implementations)
 -- Map <leader>lr to toggle the LSP references
 map("n", "<leader>lr", mason.toggle_lsp_references)

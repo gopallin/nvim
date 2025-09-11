@@ -29,3 +29,9 @@ vim.opt.foldmethod = "indent"
 vim.opt.foldenable = true -- Enable folding
 vim.opt.foldlevel = 99    -- Start with all folds open
 
+-- Disable providers for languages not in use
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+

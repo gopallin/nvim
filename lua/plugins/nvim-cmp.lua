@@ -39,11 +39,4 @@ cmp.setup({
   },
 })
 
--- Set up LSP servers (e.g., Intelephense for PHP and TSServer for TypeScript)
-lspconfig.intelephense.setup({
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
-})
 
-lspconfig.ts_ls.setup({
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
-})

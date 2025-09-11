@@ -5,6 +5,11 @@ if not status then
 end
 
 fzf.setup({
+  previewers = {
+    media = {
+      enabled = true,
+    },
+  },
   git = {
     status = {
       cmd = "git status --short --untracked-files=all",
@@ -48,9 +53,7 @@ fzf.setup({
     end,
   },
   winopts = {
-    preview = {
-      wrap = "wrap",
-    },
+    border = "rounded",
   },
   defaults = {
     git_icons = false,

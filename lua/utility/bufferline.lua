@@ -1,5 +1,17 @@
 local bufferline_config = require('plugins.bufferline') -- Adjust path to your bufferline.lua
-local bufferline = require('bufferline')
+
+local status, bufferline = pcall(require, 'bufferline')
+
+if not status then
+  local M = {}
+  M.jump_to_last_buffer = function() end
+  M.switch_to_previous_buffer = function() end
+  M.close_others_in_group = function() end
+  M.toggle_terminal_buffers = function() end
+  M.close_current_buffer = function() end
+  M.jump_to_buffer_at = function() end
+  return M
+end
 
 local M = {}
 
