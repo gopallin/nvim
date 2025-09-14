@@ -47,8 +47,8 @@ map("n", "<leader>gb", fzf.show_git_blame)
 -- LSP-related keybindings
 map("n", "<leader>ld", "<C-]>") -- Go to LSP definition directly
 map("n", "<leader>li", fzf.lsp_implementations)
--- Map <leader>lr to toggle the LSP references
-map("n", "<leader>lr", mason.toggle_lsp_references)
+-- Map <leader>lr to show LSP references in Telescope
+map("n", "<leader>lr", function() require('telescope.builtin').lsp_references() end)
 
 for i = 1, 8 do
   map("n", "<leader>" .. i, function() bufferline.jump_to_buffer_at(i) end)
