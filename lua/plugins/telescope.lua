@@ -4,6 +4,22 @@ if not status then
   return
 end
 
+local function yank_selection(prompt_bufnr)
+  local selection = require("telescope.actions.state").get_selected_entry()
+  if selection and selection.text then
+    local message = selection.text
+    if type(message) == 'string' then
+      vim.fn.setreg("+", message)
+      vim.notify("Error message copied to clipboard", vim.log.levels.INFO)
+      require('telescope.actions').close(prompt_bufnr)
+    else
+      vim.notify("Could not get text to copy from selection.", vim.log.levels.ERROR)
+    end
+  else
+    vim.notify("No selection or text field found.", vim.log.levels.ERROR)
+  end
+end
+
 telescope.setup({
   defaults = {
     layout_strategy = 'vertical',
@@ -18,6 +34,10 @@ telescope.setup({
       i = {
         ["<C-j>"] = "move_selection_next",
         ["<C-k>"] = "move_selection_previous",
+        ["<C-y>"] = yank_selection,
+      },
+      n = {
+        ["<C-y>"] = yank_selection,
       },
     },
   },
