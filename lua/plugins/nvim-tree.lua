@@ -11,10 +11,11 @@ nvim_tree.setup({
   on_attach = keybindings.setup_nvim_tree_keymaps,
 		sort_by = "case_sensitive",
   git = {
-		enable = true,
+		enable = false,
+    ignore = false,
   },
   filters = {
-		dotfiles = false,
+		dotfiles = true,
   },
   view = {
     side = "left",
