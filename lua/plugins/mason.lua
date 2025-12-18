@@ -12,9 +12,10 @@ if not mlsp_status then
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-if capabilities.workspace then
-  capabilities.workspace.didChangeWatchedFiles = nil
-end
+capabilities.workspace.didChangeWatchedFiles = {
+  dynamicRegistration = true,
+  exclude = { "**/.git/**", "**/private/**" },
+}
 
 local servers = { "lua_ls", "intelephense" }
 
@@ -28,13 +29,6 @@ mason_lspconfig.setup({
     function(server_name)
       require("lspconfig")[server_name].setup({
         capabilities = capabilities,
-        root_dir = function(fname)
-          local util = require("lspconfig.util")
-          if fname:find("/private/var/folders/", 1, true) then
-            return nil
-          end
-          return util.root_pattern(".git", "lua")(fname)
-        end,
       })
     end,
   },
