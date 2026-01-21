@@ -69,3 +69,9 @@ map('n', '<leader>ht', bufferline.toggle_terminal_buffers)
 for open, _ in pairs(wrap.pairs) do
   map('v', open, function() wrap.wrap_selection(open) end)
 end
+
+map("n", "<leader>ko", function() require('kulala').open() end)
+map("n", "<leader>kr", function() require('kulala').run() end)
+map("n", "<leader>kc", function() require('kulala').close() end)
+map("n", "<leader>ki", function() require('kulala').inspect() end)
+map("n", "<leader>kf", function() require('kulala').search() end)

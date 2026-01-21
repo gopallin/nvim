@@ -56,11 +56,15 @@ require("lazy").setup({
 
   { "ibhagwan/fzf-lua" },
 
-  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" }, event = "VimEnter" },
+  { "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" },
+    event = "VimEnter",
+  },
 
   { "lukas-reineke/indent-blankline.nvim" },
 
   { "projekt0n/github-nvim-theme" },
 
+  { "mistweaverco/kulala.nvim" },
 })
 
