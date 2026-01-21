@@ -39,3 +39,17 @@ vim.api.nvim_create_autocmd("TermClose", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "text", "gitcommit" },
+  callback = function()
+    vim.opt.spell = true
+    vim.opt.spelllang = { "en_us" }
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.cmd([[syntax match MyCamelCase /\<[A-Z][a-zA-Z0-9]\+\>/ contains=@NoSpell]])
+  end,
+})
