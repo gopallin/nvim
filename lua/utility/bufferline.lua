@@ -22,11 +22,28 @@ local function jump_to_last_buffer()
 end
 
 local function switch_to_previous_buffer()
-  local buffers = vim.fn.getbufinfo({ buflisted = true }) -- Get all listed buffers
-  if #buffers > 1 then
-    vim.cmd("b#") -- Switch to the previous buffer
-  else
+  local buffers = vim.fn.getbufinfo({ buflisted = true })
+  if #buffers < 2 then
     vim.notify("No previous buffer available", vim.log.levels.INFO)
+    return
+  end
+
+  local current_bufnr = vim.api.nvim_get_current_buf()
+  local other_buffers = {}
+  for _, buf in ipairs(buffers) do
+    if buf.bufnr ~= current_bufnr then
+      table.insert(other_buffers, buf)
+    end
+  end
+
+  if #other_buffers > 0 then
+    table.sort(other_buffers, function(a, b)
+      return a.lastused > b.lastused
+    end)
+    vim.api.nvim_set_current_buf(other_buffers[1].bufnr)
+  else
+    -- This part of the code should be unreachable if #buffers is >= 2
+    vim.notify("No other buffer to switch to.", vim.log.levels.WARN)
   end
 end
 
