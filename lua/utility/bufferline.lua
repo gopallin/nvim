@@ -30,9 +30,15 @@ local function switch_to_previous_buffer()
 
   local current_bufnr = vim.api.nvim_get_current_buf()
   local other_buffers = {}
+  -- Only filter terminals if they are hidden via toggle_terminal_buffers
+  local terminals_hidden = not _G.show_terminals
+
   for _, buf in ipairs(buffers) do
     if buf.bufnr ~= current_bufnr then
-      table.insert(other_buffers, buf)
+      local is_terminal = vim.api.nvim_buf_get_option(buf.bufnr, "buftype") == "terminal"
+      if not (terminals_hidden and is_terminal) then
+        table.insert(other_buffers, buf)
+      end
     end
   end
 
@@ -42,8 +48,7 @@ local function switch_to_previous_buffer()
     end)
     vim.api.nvim_set_current_buf(other_buffers[1].bufnr)
   else
-    -- This part of the code should be unreachable if #buffers is >= 2
-    vim.notify("No other buffer to switch to.", vim.log.levels.WARN)
+    vim.notify("No other non-terminal buffer to switch to.", vim.log.levels.INFO)
   end
 end
 
