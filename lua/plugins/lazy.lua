@@ -63,7 +63,7 @@ require("lazy").setup({
 
   { "lukas-reineke/indent-blankline.nvim" },
 
-  { "projekt0n/github-nvim-theme" },
+  { "dapovich/anysphere.nvim" },
 
   { "mistweaverco/kulala.nvim" },
 })

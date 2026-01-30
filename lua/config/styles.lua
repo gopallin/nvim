@@ -1,6 +1,6 @@
 -- vim.cmd("colorscheme vim")
 -- vim.cmd("colorscheme lackluster")
-vim.cmd.colorscheme("github_dark_dimmed")
+vim.cmd.colorscheme("anysphere")
 
 --vim.cmd("highlight CursorLine ctermbg=black guibg=black")
 --vim.cmd("highlight CursorColumn ctermbg=black guibg=black")

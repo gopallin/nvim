@@ -10,7 +10,7 @@ kulala.setup({
     { "<leader>Ra", desc = "Send all requests" },
     { "<leader>Rb", desc = "Open scratchpad" },
   },
-  ft = {"http"},
+  ft = { "http", "rest"},
   opts = {
     global_keymaps = true,
     global_keymaps_prefix = "<leader>R",

@@ -50,6 +50,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
-    vim.cmd([[syntax match MyCamelCase /\<[A-Z][a-zA-Z0-9]\+\>/ contains=@NoSpell]])
+    vim.cmd([[syntax match MyCamelCase_1 /\<[a-z]\+[A-Z][a-zA-Z0-9]*\>/ contains=@NoSpell]])
+    vim.cmd([[syntax match MyCamelCase_2 /\<[A-Z][a-z]\+[A-Z][a-zA-Z0-9]*\>/ contains=@NoSpell]])
   end,
 })
