@@ -6,6 +6,7 @@ M.pairs = {
   ["{"] = "}",
   ['"'] = '"',
   ["'"] = "'",
+  ["`"] = "`",
 }
 
 function M.wrap_selection(open)
