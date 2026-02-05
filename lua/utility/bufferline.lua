@@ -10,10 +10,61 @@ if not status then
   M.toggle_terminal_buffers = function() end
   M.close_current_buffer = function() end
   M.jump_to_buffer_at = function() end
+  M.jump_to_previous_buffer = function() end
+  M.jump_to_next_buffer = function() end
   return M
 end
 
 local M = {}
+
+local function get_bufferline_elements()
+  local elements = bufferline.get_elements().elements or {}
+  local terminals_hidden = not _G.show_terminals
+  if not terminals_hidden then
+    return elements
+  end
+
+  local filtered = {}
+  for _, buf in ipairs(elements) do
+    local is_terminal = vim.api.nvim_buf_get_option(buf.id, "buftype") == "terminal"
+    if not is_terminal then
+      table.insert(filtered, buf)
+    end
+  end
+
+  return filtered
+end
+
+local function jump_relative_buffer(delta)
+  local buffers = get_bufferline_elements()
+  if #buffers < 2 then
+    vim.notify("No other buffer available", vim.log.levels.INFO)
+    return
+  end
+
+  local current_bufnr = vim.api.nvim_get_current_buf()
+  local current_index = nil
+
+  for i, buf in ipairs(buffers) do
+    if buf.id == current_bufnr then
+      current_index = i
+      break
+    end
+  end
+
+  if not current_index then
+    vim.notify("Current buffer not in bufferline list", vim.log.levels.INFO)
+    return
+  end
+
+  local target_index = current_index + delta
+  if target_index < 1 or target_index > #buffers then
+    vim.notify("No buffer available in that direction", vim.log.levels.INFO)
+    return
+  end
+
+  vim.api.nvim_set_current_buf(buffers[target_index].id)
+end
 
 local function jump_to_last_buffer()
   local last_buffer_index = #vim.fn.getbufinfo({ buflisted = true })
@@ -95,11 +146,21 @@ local function jump_to_buffer_at(position)
   end
 end
 
+local function jump_to_previous_buffer()
+  jump_relative_buffer(-1)
+end
+
+local function jump_to_next_buffer()
+  jump_relative_buffer(1)
+end
+
 M.jump_to_last_buffer = jump_to_last_buffer
 M.switch_to_previous_buffer = switch_to_previous_buffer
 M.close_others_in_group = close_others_in_group
 M.toggle_terminal_buffers = toggle_terminal_buffers
 M.close_current_buffer = close_current_buffer
 M.jump_to_buffer_at = jump_to_buffer_at
+M.jump_to_previous_buffer = jump_to_previous_buffer
+M.jump_to_next_buffer = jump_to_next_buffer
 
 return M

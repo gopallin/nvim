@@ -62,6 +62,8 @@ map("n", "<leader>be", ":bnext<CR>")
 -- map("n", "<leader>bd", ":bnext<CR>:bd#<CR>")
 map("n", "<leader>bd", bufferline.close_current_buffer)
 map("n", "<leader>bo", ":b#<CR>")
+map("n", "<C-h>", bufferline.jump_to_previous_buffer)
+map("n", "<C-l>", bufferline.jump_to_next_buffer)
 
 map("n", "t", terminal.open_terminal)
 map("n", "<leader>t", terminal.toggle_terminal)
