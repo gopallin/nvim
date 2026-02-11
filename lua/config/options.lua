@@ -21,6 +21,8 @@ vim.o.showtabline = 2 -- Always show the tabline
 
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.hlsearch = true
+vim.o.incsearch = true
 
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
@@ -34,4 +36,3 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
-
