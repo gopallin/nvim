@@ -32,6 +32,14 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end,
 })
 
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  callback = function()
+    vim.wo.number = true
+    vim.wo.relativenumber = true
+  end,
+})
+
 vim.api.nvim_create_autocmd("TermClose", {
   pattern = "*",
   callback = function(args)
