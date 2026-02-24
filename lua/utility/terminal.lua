@@ -68,10 +68,19 @@ local function open_new_terminal()
   vim.cmd("botright split")
   vim.cmd("enew") -- Create a new empty buffer for the terminal
   vim.cmd("resize 20")
-  -- Neovim is running as root, so we force the terminal to start as 'user'
-  -- We use 'sudo -u user' to preserve the current working directory
+  -- If Neovim runs via sudo, start terminal as the invoking user instead of root.
+  -- Fall back to the current shell user when no non-root target is available.
   local cwd = vim.fn.getcwd()
-  vim.fn.termopen({ "sudo", "-u", "user", vim.o.shell, "-l" }, { cwd = cwd })
+  local target_user = vim.env.SUDO_USER or vim.env.USER or ""
+  local term_cmd
+
+  if target_user ~= "" and target_user ~= "root" then
+    term_cmd = { "sudo", "-u", target_user, vim.o.shell, "-l" }
+  else
+    term_cmd = { vim.o.shell, "-l" }
+  end
+
+  vim.fn.termopen(term_cmd, { cwd = cwd })
   local buf = vim.api.nvim_get_current_buf()
   local win = vim.api.nvim_get_current_win()
   local session = { buf = buf, win = win, last_active = os.time() }
