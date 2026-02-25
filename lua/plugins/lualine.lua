@@ -11,7 +11,7 @@ lualine.setup({
 		section_separators = { left = " ", right = "" },
 	},
 	extensions = { "nvim-tree", "toggleterm" },
-	 sections = {
+  sections = {
     lualine_a = { "mode" },
     lualine_b = { "branch", "diff" },
     lualine_c = {
@@ -20,4 +20,4 @@ lualine.setup({
     lualine_x = { "encoding", "fileformat", "filetype" },
     lualine_y = { "progress" },
     lualine_z = { "location" },
-  },})
+  }})

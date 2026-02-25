@@ -1,5 +1,6 @@
 local terminal = require('utility.terminal')
 local fzf = require('utility.fzf')
+local autocmd = require('utility.autocmds')
 
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
@@ -11,6 +12,7 @@ vim.api.nvim_create_autocmd("CursorMoved", {
   callback = function()
     vim.lsp.buf.clear_references()
     fzf.clear_git_blame()
+    autocmd.flash_cursor_line_on_line_change()
   end,
 })
 
