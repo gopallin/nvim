@@ -6,7 +6,7 @@ end
 local mason = require('utility.mason')
 local bufferline = require('utility.bufferline')
 local terminal = require('utility.terminal')
-local git_blame = require('utility.telescope')
+local telescope = require('utility.telescope')
 local wrap = require('utility.wrap')
 
 map({'n', 'v'}, 'gg', 'gg^')
@@ -42,7 +42,7 @@ map("n", "<leader>fs", function() require('telescope.builtin').keymaps() end)
 -- Git integration
 map("n", "<leader>gc", function() require('telescope.builtin').git_commits() end)
 map("n", "<leader>gs", function() require('telescope.builtin').git_status() end)
-map("n", "<leader>gb", git_blame.show_git_blame)
+map("n", "<leader>gb", telescope.show_git_blame)
 
 -- LSP-related keybindings
 map("n", "<leader>ld", "<C-]>") -- Go to LSP definition directly

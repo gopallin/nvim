@@ -1,6 +1,6 @@
 local terminal = require('utility.terminal')
 local autocmd = require('utility.autocmds')
-local git_blame = require('utility.telescope')
+local telescope = require('utility.telescope')
 
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
 vim.api.nvim_create_autocmd("CursorMoved", {
   callback = function()
     vim.lsp.buf.clear_references()
-    git_blame.clear_git_blame()
+    telescope.clear_git_blame()
     autocmd.flash_cursor_line_on_line_change()
   end,
 })
@@ -30,7 +30,7 @@ vim.api.nvim_create_autocmd("User", {
 vim.api.nvim_create_autocmd("CursorHold", {
   pattern = "*",
   callback = function()
-    git_blame.show_git_blame()
+    telescope.show_git_blame()
   end,
 })
 
