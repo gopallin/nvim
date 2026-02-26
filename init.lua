@@ -17,7 +17,6 @@ load_files('plugins', {
   'bufferline',
   'diffview',
   'formatter',
-  'fzf-lua',
   'indent-blankline',
   'telescope',
 })

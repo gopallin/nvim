@@ -18,7 +18,7 @@ function M.flash_cursor_line()
     if vim.api.nvim_buf_is_valid(buf) then
       vim.api.nvim_buf_clear_namespace(buf, cursor_focus_ns, 0, -1)
     end
-  end, 100)
+  end, 150)
 end
 
 function M.flash_cursor_line_on_line_change()

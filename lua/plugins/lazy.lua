@@ -54,8 +54,6 @@ require("lazy").setup({
   { "hrsh7th/cmp-cmdline" },
   { "saadparwaiz1/cmp_luasnip" },
 
-  { "ibhagwan/fzf-lua" },
-
   { "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" },
     event = "VimEnter",

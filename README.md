@@ -18,7 +18,3 @@ git clone <repository-url> ~/.config/nvim
   - `lua/plugins/`: Plugin configurations for `lazy.vim`.
   - `lua/utility/`: Utility functions.
 - `lazy-lock.json`: `lazy.vim` lockfile for reproducible builds.
-
-## Temporary Plugin Change
-
-Some functions of `fzf-lua` have been temporarily replaced with `telescope.nvim`. This is due to an unresolved bug with `fzf-lua`'s floating window focus that appeared after upgrading to Neovim 0.11. This may be revisited in the future.

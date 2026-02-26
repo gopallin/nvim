@@ -6,7 +6,7 @@ end
 local mason = require('utility.mason')
 local bufferline = require('utility.bufferline')
 local terminal = require('utility.terminal')
-local fzf = require('utility.fzf')
+local git_blame = require('utility.telescope')
 local wrap = require('utility.wrap')
 
 map({'n', 'v'}, 'gg', 'gg^')
@@ -38,17 +38,15 @@ map("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
 map("n", "<leader>fg", function() require('telescope.builtin').live_grep() end)
 map("n", "<leader>fo", function() require('telescope.builtin').oldfiles() end)
 map("n", "<leader>fs", function() require('telescope.builtin').keymaps() end)
-map("n", "<leader>fb", fzf.buffers)
-map("n", "<leader>fh", fzf.help_tags)
 
 -- Git integration
-map("n", "<leader>gc", fzf.git_commits)
-map("n", "<leader>gs", fzf.git_status)
-map("n", "<leader>gb", fzf.show_git_blame)
+map("n", "<leader>gc", function() require('telescope.builtin').git_commits() end)
+map("n", "<leader>gs", function() require('telescope.builtin').git_status() end)
+map("n", "<leader>gb", git_blame.show_git_blame)
 
 -- LSP-related keybindings
 map("n", "<leader>ld", "<C-]>") -- Go to LSP definition directly
-map("n", "<leader>li", fzf.lsp_implementations)
+map("n", "<leader>li", function() require('telescope.builtin').lsp_implementations() end)
 -- Map <leader>lr to show LSP references in Telescope
 map("n", "<leader>lr", function() require('telescope.builtin').lsp_references() end)
 

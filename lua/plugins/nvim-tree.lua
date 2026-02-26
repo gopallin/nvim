@@ -22,7 +22,7 @@ nvim_tree.setup({
     number = false,
     relativenumber = false,
     signcolumn = "no",
-    width = 30,
+    width = 37,
   },
   renderer = {
     group_empty = true,
