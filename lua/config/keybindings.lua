@@ -34,6 +34,7 @@ map('n', '<C-y>', '9<C-y>')  -- Scroll up
 -- Files and Search
 map("n", "<leader>fe", function() require('telescope.builtin').diagnostics() end)
 map("n", "<leader>ff", function() require('telescope.builtin').find_files() end)
+map("n", "<leader>fb", function() require('telescope.builtin').buffers() end)
 
 map("n", "<leader>fg", function() require('telescope.builtin').live_grep() end)
 map("n", "<leader>fo", function() require('telescope.builtin').oldfiles() end)
