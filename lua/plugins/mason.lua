@@ -1,4 +1,11 @@
 -- mason.lua
+local watchfiles = require('vim.lsp._watchfiles')
+local glob = vim.glob
+
+watchfiles._poll_exclude_pattern = watchfiles._poll_exclude_pattern
+  + glob.to_lpeg('**/private/var/folders/**')
+  + glob.to_lpeg((vim.env.TMPDIR or '') .. '**')
+
 local mason_status, mason = pcall(require, "mason")
 if not mason_status then
   vim.notify("mason not found")
@@ -13,7 +20,7 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.workspace.didChangeWatchedFiles = {
-  dynamicRegistration = true,
+  dynamicRegistration = false,
   exclude = { "**/.git/**", "**/private/**" },
 }
 
