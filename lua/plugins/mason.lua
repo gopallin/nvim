@@ -29,14 +29,10 @@ local servers = { "lua_ls", "intelephense" }
 -- Setup mason
 mason.setup()
 
+-- mason-lspconfig v2 dropped the `handlers` option; capabilities are now applied
+-- through Neovim's native LSP config and servers are auto-enabled by the plugin.
+vim.lsp.config("*", { capabilities = capabilities })
+
 mason_lspconfig.setup({
   ensure_installed = servers,
-  automatic_installation = true,
-  handlers = {
-    function(server_name)
-      require("lspconfig")[server_name].setup({
-        capabilities = capabilities,
-      })
-    end,
-  },
 })
