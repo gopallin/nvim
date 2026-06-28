@@ -46,7 +46,7 @@ map("n", "<leader>gs", function() require('telescope.builtin').git_status() end)
 map("n", "<leader>gb", telescope.show_git_blame)
 
 -- LSP-related keybindings
-map("n", "<leader>ld", function() vim.lsp.buf.definition() end) -- Go to LSP definition directly
+map("n", "<leader>ld", function() require('telescope.builtin').lsp_definitions() end) -- Go to LSP definition (Telescope picker)
 map("n", "<leader>li", function() require('telescope.builtin').lsp_implementations() end)
 -- Map <leader>lr to show LSP references in Telescope
 map("n", "<leader>lr", function() require('telescope.builtin').lsp_references() end)
