@@ -63,6 +63,6 @@ require("lazy").setup({
 
   { "dapovich/anysphere.nvim" },
 
-  { "mistweaverco/kulala.nvim" },
+
 })
 
