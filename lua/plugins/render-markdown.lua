@@ -30,6 +30,12 @@ render_markdown.setup({
   dash = {
     width = 60,
   },
+  pipe_table = {
+    -- GFM tables have no separator between body rows and the plugin offers
+    -- none, so lean on heavier column lines and wider cells to tell rows apart.
+    preset = "heavy",
+    padding = 2,
+  },
   checkbox = {
     unchecked = { icon = "󰄱 " },
     checked = { icon = "󰱒 " },
