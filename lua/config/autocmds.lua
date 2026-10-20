@@ -53,7 +53,11 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown", "text", "gitcommit" },
   callback = function()
     vim.opt.spell = true
-    vim.opt.spelllang = { "en_us" }
+    -- "cjk" skips Chinese/Japanese/Korean runs; without it every CJK word is
+    -- flagged as misspelled and the whole buffer gets undercurled.
+    vim.opt.spelllang = { "en_us", "cjk" }
+    -- The cursor column cuts through rendered markdown blocks; keep only the line.
+    vim.opt_local.cursorcolumn = false
   end,
 })
 

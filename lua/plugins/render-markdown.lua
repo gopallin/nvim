@@ -10,12 +10,25 @@ render_markdown.setup({
   render_modes = { "n", "c", "t" },
   heading = {
     icons = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
+    border = true, -- virtual line above/below so headings get breathing room
+    border_virtual = true, -- borders never consume real buffer lines
+    left_pad = 1,
+    right_pad = 2,
   },
   code = {
     style = "full", -- language icon + name above block, background behind
     width = "block",
-    left_pad = 1,
+    border = "thick",
+    left_pad = 2,
+    right_pad = 2,
+  },
+  bullet = {
+    icons = { "●", "○", "◆", "◇" },
+    left_pad = 0,
     right_pad = 1,
+  },
+  dash = {
+    width = 60,
   },
   checkbox = {
     unchecked = { icon = "󰄱 " },
