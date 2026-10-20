@@ -18,6 +18,9 @@ map("n", "<leader>dc", ":DiffviewClose<CR>")
 
 map("n", "<leader>e", ":NvimTreeToggle<CR>")
 
+-- Markdown rendering (render-markdown.nvim)
+map("n", "<leader>mp", ":RenderMarkdown toggle<CR>")
+
 map("t", "<Esc>", "<C-\\><C-n>")
 map('n', 'm', ':Format<CR>')
 map('v', 'q', ":m '<-2<CR>gv=gv")
