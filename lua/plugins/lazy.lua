@@ -63,6 +63,12 @@ require("lazy").setup({
 
   { "dapovich/anysphere.nvim" },
 
+  -- render-markdown.nvim (in-buffer markdown rendering)
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
 
 })
 

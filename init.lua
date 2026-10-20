@@ -19,6 +19,7 @@ load_files('plugins', {
   'formatter',
   'indent-blankline',
   'telescope',
+  'render-markdown',
 })
 
 load_files('config', {
